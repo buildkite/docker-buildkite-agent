@@ -1,6 +1,6 @@
 # buildkite-agent
 
-This is a Docker image for running the [Buildkite](https://buildkite.com/) Agent, a small runner [written in golang](https://github.com/buildkite/agent) that waits for build jobs, executes them, and reports back their log and exit status.
+buildkite-agent is a small runner [written in golang](https://github.com/buildkite/agent) that waits for build jobs, executes them, and reports back their log and exit status to [Buildkite](https://buildkite.com/). This is a [docker](https://docker.com/) image that eases setup.
 
 Usage:
 
