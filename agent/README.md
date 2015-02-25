@@ -2,15 +2,15 @@
 
 Basic usage:
 
-```
-docker run -e -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent
+```bash
+docker run -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent
 ```
 
 ## Doing Docker-based builds
 
 If you want to use buildkite-agent's Docker support you'll need to make Docker available inside the container. You can do this by linking in the binary and the unix socket.
 
-```
+```bash
 docker run -e BUILDKITE_AGENT_TOKEN=xxx \
            -v /var/run/docker.sock:/var/run/docker.sock \
            -v `which docker`:/usr/bin/docker \
@@ -27,7 +27,7 @@ You can create your own image on the base image to add hooks, ssh keys, etc.
 
 Hooks should be copied into `/hooks`. For example:
 
-```
+```bash
 FROM buildkite-agent
 
 ADD hooks/* /hooks
@@ -37,7 +37,7 @@ ADD hooks/* /hooks
 
 If you want to check out private code you'll need to copy the access credentials into the container. For example:
 
-```
+```bash
 FROM buildkite-agent
 
 ADD repo_access_rsa ~/.ssh/id_rsa
