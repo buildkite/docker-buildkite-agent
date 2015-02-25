@@ -24,23 +24,21 @@ If you want to use buildkite-agent's Docker (so the build jobs themselves are ru
 
 ```bash
 docker run -e BUILDKITE_AGENT_TOKEN=xxx \
-           -v /var/run/docker.sock:/var/run/docker.sock \
            -v `which docker`:/usr/bin/docker \
+           -v /var/run/docker.sock:/var/run/docker.sock \
            buildkite/agent
 ```
 
 boot2docker is a bit trickier, because it uses TCP and TLS:
 
 ```bash
-docker run -it \
-           -e BUILDKITE_AGENT_TOKEN=xxx \
+docker run -e BUILDKITE_AGENT_TOKEN=xxx \
            -e DOCKER_HOST="$DOCKER_HOST" \
            -e DOCKER_CERT_PATH=/certs \
            -e DOCKER_TLS_VERIFY=1 \
-           --net=host \
            -v `which docker`:/usr/bin/docker \
            -v ~/.boot2docker/certs/boot2docker-vm:/certs \
-           --rm buildkite-agent-dev \
+           --net=host \
            buildkite/agent
 ```
 
