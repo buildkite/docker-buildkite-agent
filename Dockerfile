@@ -18,7 +18,6 @@ ENV BUILDKITE_USER="root" \
     BUILDKITE_BOOTSTRAP_SCRIPT_PATH="/etc/buildkite-agent/bootstrap.sh" \
     BUILDKITE_HOOKS_PATH="/etc/buildkite-agent/hooks" \
     BUILDKITE_BUILD_PATH="/builds" \
-    BUILDKITE_BIN_PATH="/usr/bin" \
-    BUILDKITE_AGENT_DEBUG="true"
+    BUILDKITE_BIN_PATH="/usr/bin"
 
 CMD ["buildkite-agent", "start"]
