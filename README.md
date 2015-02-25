@@ -8,8 +8,13 @@ Usage:
 docker run -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent
 ```
 
-* To run it as a background daemon, add `-d`.
-* To enable debug output set `-e BUILDKITE_AGENT_DEBUG=true`.
+Tips:
+
+* To run it as a background daemon, add `-d`
+* To set agent meta-data set `-e BUILDKITE_AGENT_META_DATA=key1=val1,key2=val2`
+* To enable debug output set `-e BUILDKITE_AGENT_DEBUG=true`
+* To name the docker container (for easier management) use `--name my-agent`
+* To see all the env vars and options run: `docker run buildkite/agent buildkite-agent start --help`
 
 And don't forget: because it's Docker, you can run as many parallel agents as your machine can handle.
 
