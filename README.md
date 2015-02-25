@@ -29,7 +29,20 @@ docker run -e BUILDKITE_AGENT_TOKEN=xxx \
            buildkite/agent
 ```
 
-If you're using Docker via a TCP socket (like boot2docker) then you'll need to set the `DOCKER_HOST` environment variable and expose the TCP socket in some way.
+boot2docker is a bit trickier, because it uses TCP and TLS:
+
+```bash
+docker run -it \
+           -e BUILDKITE_AGENT_TOKEN=xxx \
+           -e DOCKER_HOST="$DOCKER_HOST" \
+           -e DOCKER_CERT_PATH=/certs \
+           -e DOCKER_TLS_VERIFY=1 \
+           --net=host \
+           -v `which docker`:/usr/bin/docker \
+           -v ~/.boot2docker/certs/boot2docker-vm:/certs \
+           --rm buildkite-agent-dev \
+           buildkite/agent
+```
 
 ## Customising your agent image
 
