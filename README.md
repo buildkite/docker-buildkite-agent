@@ -1,38 +1,34 @@
 # buildkite-agent
 
-buildkite-agent is a small runner [written in golang](https://github.com/buildkite/agent) that waits for build jobs, executes them, and reports back their log and exit status to [Buildkite](https://buildkite.com/). This is a [docker](https://docker.com/) image that eases setup.
+A standard [Docker](https://docker.com/) image for easily running a [Buildkite Agent](https://github.com/buildkite/agent) instance.
+
+If this pre-made image isn't suitable use our standard install instructions for other platforms to install the agent inside your own Docker image.
 
 Usage:
 
 ```bash
-docker run -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent
+docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent
 ```
 
-Tips:
+## Containerizing Builds
 
-* To run it as a background daemon, add `-d`
-* To set agent meta-data set `-e BUILDKITE_AGENT_META_DATA=key1=val1,key2=val2`
-* To enable debug output set `-e BUILDKITE_AGENT_DEBUG=true`
-* To name the docker container (for easier management) use `--name my-agent`
-* To see all the env vars and options run: `docker run buildkite/agent buildkite-agent start --help`
+Note: you don't need to use this image to containerize each build with Docker, you can do this with any of the standard Linux-based installers. See our [Containerizing Builds Guide](https://buildkite.com/docs/guides/containerizing-builds) for more details.
 
-And don't forget: because it's Docker, you can run as many parallel agents as your machine can handle.
-
-## Docker-based builds
-
-If you want to use buildkite-agent's Docker (so the build jobs themselves are run within self-contaned containers) you'll need to make Docker available inside the container. You can do this by linking in the binary and the unix socket like so:
+If you want to use the Docker image and have each build be isolated within its own Docker container you’ll need to make the Docker daemon and binary available inside the image. One way to do this is by linking them in directly like so:
 
 ```bash
-docker run -e BUILDKITE_AGENT_TOKEN=xxx \
+docker run -it \
+           -e BUILDKITE_AGENT_TOKEN=xxx \
            -v `which docker`:/usr/bin/docker \
            -v /var/run/docker.sock:/var/run/docker.sock \
            buildkite/agent
 ```
 
-boot2docker is a bit trickier, because it uses TCP and TLS:
+If you're using boot2docker (or any TCP and TLS Docker setup) you'll need to pass in the certificates and allow host network access:
 
 ```bash
-docker run -e BUILDKITE_AGENT_TOKEN=xxx \
+docker run -it \
+           -e BUILDKITE_AGENT_TOKEN=xxx \
            -e DOCKER_HOST="$DOCKER_HOST" \
            -e DOCKER_CERT_PATH=/certs \
            -e DOCKER_TLS_VERIFY=1 \
@@ -42,19 +38,19 @@ docker run -e BUILDKITE_AGENT_TOKEN=xxx \
            buildkite/agent
 ```
 
-## Customising your agent image
+## Customising The Agent Image
 
-The base image includes Ubuntu, git, the agent, and little else. If you want to add hooks, ssh keys, etc. you can easily extend the base image.
+The base image includes Ubuntu, git, the agent, and little else. If you want to add hooks, ssh keys, etc. you can easily extend the base image using our standard [Ubuntu setup instructions](https://buildkite.com/docs/agent/ubuntu).
 
-To add hooks simply copy them into `/hooks`:
+For example, to add hooks you could copy the hook scripts into the container:
 
 ```
 FROM buildkite/agent
 
-ADD hooks/* /hooks
+ADD hooks/* /etc/buildkite-agent/hooks
 ```
 
-If you need to test private code simply copy the relevant access credentials into the container, for example:
+If you need to test private code you could copy the relevant private key into the container, for example:
 
 ```
 FROM buildkite/agent
