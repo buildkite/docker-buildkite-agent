@@ -30,24 +30,25 @@ You can add custom hooks by copying (or mounting) them into the correct hooks di
 ```
 FROM buildkite/agent
 
-Add hooks /buildkite/hooks/
+ADD hooks /buildkite/hooks/
 ```
 
 ## Configuring
 
-Almost all agent settings can be set with environment variables. Alternatively you can copy (or mount) a configuration file into the container:
+Almost all agent settings can be set with environment variables. Alternatively you can copy (or mount) a configuration file into the container, for example:
 
 ```
 FROM buildkite/agent
 
 ADD buildkite-agent.cfg /buildkite/buildkite-agent.cfg
+
 ENV BUILDKITE_AGENT_CONFIG=/buildkite/buildkite-agent.cfg
 ```
 
 
 ## Docker-based Builds
 
-If you want each build to be isolated within its own Docker container you’ll need to make the Docker daemon and binary available inside the image. One way to do this is by mounting them into the container:
+If you want each build to be isolated within its own Docker container you’ll need to make the Docker daemon and binary available inside the image. For example, the following simply mounts the Docker binary and socket into the agent container:
 
 ```bash
 docker run -it \
