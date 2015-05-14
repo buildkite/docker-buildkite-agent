@@ -25,9 +25,9 @@ docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:ubuntu
 
 ## Adding Hooks
 
-You can add custom hooks by copying them into the correct hooks directory:
+You can add custom hooks by copying (or mounting) them into the correct hooks directory, for example:
 
-```docker
+```
 FROM buildkite/agent
 
 Add hooks /buildkite/hooks/
