@@ -2,10 +2,10 @@
 
 Docker images for the [Buildkite Agent](https://github.com/buildkite/agent). There is a minimal Alpine Linux based image suitable for running Docker-based builds, and a larger Ubuntu based image.
 
-Supported tags:
+Available tags:
 
-* `latest` ([Dockerfile](Dockerfile)) - Alpine Linux
-* `ubuntu` ([ubuntu/Dockerfile](ubuntu/Dockerfile)) - Ubuntu
+* `latest` ([source](https://github.com/buildkite/docker-buildkite-agent/blob/master/Dockerfile)) - Alpine Linux
+* `ubuntu` ([source](https://github.com/buildkite/docker-buildkite-agent/blob/master/ubuntu/Dockerfile)) - Ubuntu
 
 ## Alpine Linux
 
@@ -25,7 +25,7 @@ docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:ubuntu
 
 ## Adding Hooks
 
-To add custom hooks you can extend the image and copy the hooks into the correct hooks directory:
+You can add custom hooks by copying them into the correct hooks directory:
 
 ```docker
 FROM buildkite/agent
