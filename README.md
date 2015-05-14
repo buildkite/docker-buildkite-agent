@@ -33,6 +33,18 @@ FROM buildkite/agent
 Add hooks /buildkite/hooks/
 ```
 
+## Configuring
+
+Almost all agent settings can be set with environment variables. Alternatively you can copy (or mount) a configuration file into the container:
+
+```
+FROM buildkite/agent
+
+ADD buildkite-agent.cfg /buildkite/buildkite-agent.cfg
+ENV BUILDKITE_AGENT_CONFIG=/buildkite/buildkite-agent.cfg
+```
+
+
 ## Docker-based Builds
 
 If you want each build to be isolated within its own Docker container you’ll need to make the Docker daemon and binary available inside the image. One way to do this is by linking them in directly like so:
@@ -45,6 +57,6 @@ docker run -it \
            buildkite/agent
 ```
 
-## Say Hi
+## Say hi!
 
-Come and say hi in the #docker channel in the Buildkite Chat slack room!
+Come and say hi in the #docker channel in the [Buildkite Chat](https://slack.buildkite.com) slack room!
