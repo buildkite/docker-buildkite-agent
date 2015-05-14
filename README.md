@@ -20,7 +20,7 @@ docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent
 This image is based on Ubuntu 14.04 and includes git and Docker Compose.
 
 ```bash
-docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent
+docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:ubuntu
 ```
 
 ## Adding Hooks
