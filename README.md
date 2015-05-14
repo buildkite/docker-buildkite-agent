@@ -47,7 +47,7 @@ ENV BUILDKITE_AGENT_CONFIG=/buildkite/buildkite-agent.cfg
 
 ## Docker-based Builds
 
-If you want each build to be isolated within its own Docker container you’ll need to make the Docker daemon and binary available inside the image. One way to do this is by linking them in directly like so:
+If you want each build to be isolated within its own Docker container you’ll need to make the Docker daemon and binary available inside the image. One way to do this is by mounting them into the container:
 
 ```bash
 docker run -it \
