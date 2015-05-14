@@ -30,7 +30,7 @@ To add custom hooks you can extend the image and copy the hooks into the correct
 ```docker
 FROM buildkite/agent
 
-Add hooks/* /buildkite/hooks/
+Add hooks /buildkite/hooks/
 ```
 
 ## Docker-based Builds
