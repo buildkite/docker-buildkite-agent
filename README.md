@@ -9,7 +9,7 @@ Available tags:
 
 ## Alpine Linux
 
-This image is based on Alpine Linux and includes git and Docker Compose. Its minimal footprint and small size makes it ideal for running agents that do Docker-based builds.
+This default image is based off Alpine Linux and includes git and Docker Compose. Its minimal footprint and small size makes it ideal for running agents that do Docker-based builds.
 
 ```bash
 docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent
@@ -17,7 +17,7 @@ docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent
 
 ## Ubuntu
 
-This image is based on Ubuntu 14.04 and includes git and Docker Compose.
+This image is based on Ubuntu 14.04 and includes git and Docker Compose. Use this if you need a full Ubuntu environment.
 
 ```bash
 docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:ubuntu
