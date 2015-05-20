@@ -1,7 +1,7 @@
 FROM gliderlabs/alpine
 MAINTAINER Tim Lucas <tim@buildkite.com>
 
-RUN apk --update add curl wget bash git openssh-client
+RUN apk --update add curl wget bash git perl openssh-client
 
 RUN curl -L https://github.com/docker/compose/releases/download/1.2.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
