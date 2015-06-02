@@ -6,6 +6,8 @@ Available tags:
 
 * `latest` ([source](https://github.com/buildkite/docker-buildkite-agent/blob/master/Dockerfile)) - Alpine Linux
 * `ubuntu` ([source](https://github.com/buildkite/docker-buildkite-agent/blob/master/ubuntu/Dockerfile)) - Ubuntu
+* `dind` ([source](https://github.com/buildkite/docker-buildkite-agent/blob/master/dind/Dockerfile)) - Ubuntu
+
 
 ## Alpine Linux
 
@@ -22,6 +24,15 @@ This image is based on Ubuntu 14.04 and includes git and Docker Compose. Use thi
 ```bash
 docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:ubuntu
 ```
+
+## Docker-in-Docker
+
+This image is identical to the Ubuntu image, except that it has docker running inside it. This requires the `--privileged` flag and is extremely experimental.
+
+```bash
+docker run -it --privileged -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:ubuntu
+```
+
 
 ## Adding Hooks
 
@@ -48,14 +59,25 @@ ENV BUILDKITE_AGENT_CONFIG=/buildkite/buildkite-agent.cfg
 
 ## Docker-based Builds
 
-If you want each build to be isolated within its own Docker container you’ll need to make the Docker daemon and binary available inside the image. For example, the following simply mounts the Docker binary and socket into the agent container:
+If you want each build to be isolated within its own Docker container, you have two options. The safest route is to use the same docker daemon which is running the agent to run containerized builds:
 
 ```bash
 docker run -it \
            -e BUILDKITE_AGENT_TOKEN=xxx \
            -v `which docker`:/usr/bin/docker \
            -v /var/run/docker.sock:/var/run/docker.sock \
+           -v /buildkite:/buildkite \
            buildkite/agent
+```
+
+Note that `/buildkite` is mounted in so that there is path parity between the agent container and the host system. This is because the container refers to the host system's docker, so any volume mounts need to be based on the host systems filesystem.
+
+The alternative is docker-in-docker which runs a docker environment within the agent's container. The upside of this is that it's much conceptually simpler and path mapping isn't required. The downside is that it's an experimental side project of the docker team and needs to be run with the `-privileged` flag.
+
+```bash
+docker run -it --privileged \
+           -e BUILDKITE_AGENT_TOKEN=xxx \
+           buildkite/agent:dind
 ```
 
 ## Say hi!
