@@ -75,7 +75,8 @@ Note that `/buildkite` is mounted in so that there is path parity between the ag
 The alternative is docker-in-docker which runs a docker environment within the agent's container. The upside of this is that it's much conceptually simpler and path mapping isn't required. The downside is that it's an experimental side project of the docker team and needs to be run with the `-privileged` flag.
 
 ```bash
-docker run -it --privileged \
+docker run -it \
+           --privileged \
            -e BUILDKITE_AGENT_TOKEN=xxx \
            buildkite/agent:dind
 ```
