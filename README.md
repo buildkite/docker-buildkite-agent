@@ -63,11 +63,11 @@ docker run -it \
            -e BUILDKITE_AGENT_TOKEN=xxx \
            -v `which docker`:/usr/bin/docker \
            -v /var/run/docker.sock:/var/run/docker.sock \
-           -v /buildkite:/buildkite \
+           -v /buildkite/builds:/buildkite/builds \
            buildkite/agent
 ```
 
-Note that `/buildkite` is mounted in so that there is path parity between the agent container and the host system. This is because the container refers to the host system's docker, so any volume mounts need to be based on the host systems filesystem.
+Note that `/buildkite/builds` is mounted in so that there is path parity between the agent container and the host system. This is because the container refers to the host system's docker, so any volume mounts need to be based on the host systems filesystem.
 
 The alternative is docker-in-docker which runs a docker environment within the agent's container. The upside of this is that it's much conceptually simpler and path mapping isn't required. The downside is that it's an experimental side project of the docker team and needs to be run with the `--privileged` flag.
 
