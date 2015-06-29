@@ -1,0 +1,1 @@
+* *2015-06-29 (All images)*<br>Upgraded Docker Compose to version 1.3.1 (see [1.3.0](https://github.com/docker/compose/releases/tag/1.3.0) and and [1.3.1](https://github.com/docker/compose/releases/tag/1.3.1) release notes)
