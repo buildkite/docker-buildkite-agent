@@ -8,7 +8,6 @@ Available tags:
 * `ubuntu` ([source](https://github.com/buildkite/docker-buildkite-agent/blob/master/ubuntu/Dockerfile)) - Ubuntu
 * `dind` ([source](https://github.com/buildkite/docker-buildkite-agent/blob/master/dind/Dockerfile)) - Ubuntu
 
-
 ## Alpine Linux
 
 This default image is based off Alpine Linux and includes git and Docker Compose. Its minimal footprint and small size makes it ideal for running agents that do Docker-based builds.
@@ -33,7 +32,6 @@ This image is identical to the Ubuntu image, except that it has docker running i
 docker run -it --privileged -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:ubuntu
 ```
 
-
 ## Adding Hooks
 
 You can add custom hooks by copying (or mounting) them into the correct hooks directory, for example:
@@ -56,7 +54,6 @@ ADD buildkite-agent.cfg /buildkite/buildkite-agent.cfg
 ENV BUILDKITE_AGENT_CONFIG=/buildkite/buildkite-agent.cfg
 ```
 
-
 ## Docker-based Builds
 
 If you want each build to be isolated within its own Docker container, you have two options. The safest route is to use the same docker daemon which is running the agent to run containerized builds:
@@ -72,7 +69,7 @@ docker run -it \
 
 Note that `/buildkite` is mounted in so that there is path parity between the agent container and the host system. This is because the container refers to the host system's docker, so any volume mounts need to be based on the host systems filesystem.
 
-The alternative is docker-in-docker which runs a docker environment within the agent's container. The upside of this is that it's much conceptually simpler and path mapping isn't required. The downside is that it's an experimental side project of the docker team and needs to be run with the `-privileged` flag.
+The alternative is docker-in-docker which runs a docker environment within the agent's container. The upside of this is that it's much conceptually simpler and path mapping isn't required. The downside is that it's an experimental side project of the docker team and needs to be run with the `--privileged` flag.
 
 ```bash
 docker run -it \
