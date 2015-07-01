@@ -15,7 +15,6 @@ RUN apt-get update -qq && apt-get install -qqy \
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9 && \
     echo 'deb https://get.docker.com/ubuntu docker main' > /etc/apt/sources.list.d/docker.list && \
     apt-get update -q && \
-    apt-get install -q -y linux-image-extra-`uname -r` && \
     apt-get install -q -y lxc-docker-1.7.0
 
 # Install the magic wrapper.
