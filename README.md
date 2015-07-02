@@ -29,7 +29,7 @@ docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:ubuntu
 This image is identical to the Ubuntu image, except that it has docker running inside it. This requires the `--privileged` flag and is extremely experimental.
 
 ```bash
-docker run -it --privileged -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:ubuntu
+docker run -it --privileged -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:dind
 ```
 
 ## Adding Hooks
