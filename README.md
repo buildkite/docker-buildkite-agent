@@ -80,4 +80,4 @@ docker run -it \
 
 ## Say hi!
 
-Come and say hi in the #docker channel in the [Buildkite Chat](https://slack.buildkite.com) slack room!
+Come and say hi in the #docker channel in the [Buildkite Chat](https://chat.buildkite.com) slack room!
