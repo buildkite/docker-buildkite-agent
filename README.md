@@ -74,6 +74,10 @@ docker run -it \
            buildkite/agent:dind
 ```
 
+## Third Party Images
+
+* [blueimp/buildkite-agent](https://github.com/blueimp/buildkite-agent) is a minimal Docker-in-Docker (dind) image based on Alpine Linux and includes docker, docker-compose, python, pip, git, bash and openssh-client. It supports running docker isolated or bind-mounting the host docker socket, and can accept private SSH keys via environment variables.
+
 ## Say hi!
 
 Come and say hi in the #docker channel in the [Buildkite Chat](https://chat.buildkite.com) slack room!
