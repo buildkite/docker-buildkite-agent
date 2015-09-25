@@ -26,7 +26,7 @@ RUN curl -L https://github.com/docker/compose/releases/download/1.3.1/docker-com
     chmod +x /usr/local/bin/docker-compose
 
 # Install Buildkite
-RUN BETA="true" DESTINATION=/buildkite bash -c \
+RUN DESTINATION=/buildkite bash -c \
     "`curl -sL https://raw.githubusercontent.com/buildkite/agent/master/install.sh`"
 
 ENV PATH=$PATH:/buildkite/bin \

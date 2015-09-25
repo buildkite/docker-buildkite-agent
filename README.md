@@ -2,11 +2,7 @@
 
 Docker images for the [Buildkite Agent](https://github.com/buildkite/agent). There is a minimal Alpine Linux based image suitable for running Docker-based builds, and a larger Ubuntu based image.
 
-Available tags:
-
-* `latest` ([source](https://github.com/buildkite/docker-buildkite-agent/blob/master/Dockerfile)) - Alpine Linux
-* `ubuntu` ([source](https://github.com/buildkite/docker-buildkite-agent/blob/master/ubuntu/Dockerfile)) - Ubuntu
-* `dind` ([source](https://github.com/buildkite/docker-buildkite-agent/blob/master/dind/Dockerfile)) - Ubuntu
+List of all available tags are at https://hub.docker.com/r/buildkite/agent/tags/
 
 ## Alpine Linux
 
