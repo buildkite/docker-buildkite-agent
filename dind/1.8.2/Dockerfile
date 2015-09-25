@@ -14,10 +14,10 @@ RUN apt-get update -qq && apt-get install -qqy \
 RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D && \
     echo 'deb https://apt.dockerproject.org/repo ubuntu-trusty main' > /etc/apt/sources.list.d/docker.list && \
     apt-get update -q && \
-    apt-get install -q -y docker-engine=1.7.1-0~trusty
+    apt-get install -q -y docker-engine=1.8.2-0~trusty
 
 # Install the magic wrapper.
-ADD https://raw.githubusercontent.com/docker/docker/v1.7.1/hack/dind /usr/local/bin/wrapdocker
+ADD https://raw.githubusercontent.com/docker/docker/v1.8.2/hack/dind /usr/local/bin/wrapdocker
 RUN chmod +x /usr/local/bin/wrapdocker
 
 # Install Docker Compose

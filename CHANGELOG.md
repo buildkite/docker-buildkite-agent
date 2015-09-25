@@ -1,3 +1,4 @@
+* *2015-07-08 (latest)*<br>Added Docker 1.8 to dind images
 * *2015-07-08 (latest)*<br>Updated to Docker Compose 1.4.1
 * *2015-07-08 (all)*<br>Switched from beta to stable versions of buildkite-agent
 * *2015-07-08 (dind)*<br>Added dind-1.7.1 with Docker 1.7.1 and Docker Compose 1.4.1
