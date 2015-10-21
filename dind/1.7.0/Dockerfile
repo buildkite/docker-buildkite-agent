@@ -7,7 +7,6 @@ RUN apt-get update -qq && apt-get install -qqy \
     curl \
     lxc \
     iptables \
-    curl \
     openssh-client \
     git
 
