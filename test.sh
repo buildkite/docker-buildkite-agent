@@ -32,6 +32,7 @@ for docker_file in $docker_files; do
   docker build --tag "$tag" .
 
   echo -e "\033[33;36m--- Testing $tag\033[0m"
+  echo "docker run -it --rm=true --privileged=true \"$tag\" --version"
   docker run -it --rm=true --privileged=true "$tag" --version
 
   echo -e "\033[33;32mLooks good! \\m/\\m/\033[0m"

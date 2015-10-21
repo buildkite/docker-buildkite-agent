@@ -10,8 +10,12 @@ RUN apt-get update -qq && apt-get install -qqy \
     git
 
 # Install Buildkite
+#
+# The buildkite-agent apt source points to 'stable' instead of 'unstable'
+# because unstable is currently broken, and there's no other unstable releases
+# since v2.1.4
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 32A37959C2FA5C3C99EFBC32A79206696452D198 && \
-    echo 'deb https://apt.buildkite.com/buildkite-agent unstable main' > /etc/apt/sources.list.d/buildkite-agent.list && \
+    echo 'deb https://apt.buildkite.com/buildkite-agent stable main' > /etc/apt/sources.list.d/buildkite-agent.list && \
     apt-get update -qq && \
     apt-get install -y buildkite-agent && \
     mkdir -p /buildkite/hooks /buildkite/builds /buildkite/plugins
