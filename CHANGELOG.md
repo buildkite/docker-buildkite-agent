@@ -1,3 +1,7 @@
+* *2015-10-21 (all)*<br>Upgraded docker-compose from 1.4.1 to 1.4.2
+* *2015-10-21 (dind and ubuntu)*<br>Switched to standard buildkite-agent Ubuntu installer (the paths to builds and hooks remain unchanged)
+* *2015-10-21 (dind)*<br>Added beta and experimental dind images.
+* *2015-10-21 (ubuntu)*<br>Added an ubuntu experimental image.
 * *2015-07-08 (latest)*<br>Added Docker 1.8 to dind images
 * *2015-07-08 (latest)*<br>Updated to Docker Compose 1.4.1
 * *2015-07-08 (all)*<br>Switched from beta to stable versions of buildkite-agent

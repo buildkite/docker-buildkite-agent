@@ -11,9 +11,9 @@ RUN apt-get update -qq && apt-get install -qqy \
 
 # Install Buildkite
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 32A37959C2FA5C3C99EFBC32A79206696452D198 && \
-    echo 'deb https://apt.buildkite.com/buildkite-agent stable main' > /etc/apt/sources.list.d/buildkite-agent.list && \
+    echo 'deb https://apt.buildkite.com/buildkite-agent unstable main' > /etc/apt/sources.list.d/buildkite-agent.list && \
     apt-get update -qq && \
-    apt-get install -y buildkite-agent && \
+    apt-get install -qqy buildkite-agent && \
     mkdir -p /buildkite/hooks /buildkite/builds /buildkite/plugins && \
     # Copy the bootstrap to /buildkite in case that's what people were expecting
     cp /usr/share/buildkite-agent/bootstrap.sh /buildkite/bootstrap.sh
