@@ -5,7 +5,6 @@
 set -eu
 
 for test_file in $(find . -name test.sh -type f); do
-  # Change into the directory
   pushd $(dirname "$test_file") > /dev/null
 
   ./test.sh
