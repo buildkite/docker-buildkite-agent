@@ -1,11 +1,12 @@
 FROM ubuntu:14.04
+MAINTAINER Tim Lucas <tim@buildkite.com>
 
-# Let's start with some basic stuff.
+# Install the essentials needed to add more apt repos, and any others
 RUN apt-get update -qq && apt-get install -qqy \
     apt-transport-https \
     ca-certificates \
-    iptables \
     curl \
+    iptables \
     openssh-client \
     git
 
@@ -16,9 +17,10 @@ RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 581
     echo 'deb https://apt.buildkite.com/buildkite-agent experimental main' > /etc/apt/sources.list.d/buildkite-agent.list && \
     apt-get update -qq && \
     apt-get install -qqy docker-engine=1.8.2-0~trusty \
-                         buildkite-agent
+                         buildkite-agent && \
+    mkdir -p /buildkite/hooks /buildkite/builds /buildkite/plugins
 
-# Install the magic wrapper.
+# Install the magic wrapper
 ADD https://raw.githubusercontent.com/docker/docker/v1.8.2/hack/dind /usr/local/bin/wrapdocker
 RUN chmod +x /usr/local/bin/wrapdocker
 
@@ -26,11 +28,9 @@ RUN chmod +x /usr/local/bin/wrapdocker
 RUN curl -L https://github.com/docker/compose/releases/download/1.4.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
 
-RUN mkdir -p /buildkite/hooks /buildkite/builds /buildkite/plugins
-
 ENV BUILDKITE_BUILD_PATH=/buildkite/builds \
     BUILDKITE_HOOKS_PATH=/buildkite/hooks \
-    BUILDKITE_HOOKS_PATH=/buildkite/plugins
+    BUILDKITE_PLUGINS_PATH=/buildkite/plugins
 
 # Internal docker runs out of a volume
 VOLUME /var/lib/docker
