@@ -2,7 +2,7 @@
 
 set -eu
 
-tag="buildkite-agent-test:latest"
+tag="buildkite-agent-test:ubuntu-experimental"
 
 docker build --tag "$tag" .
 docker run -it --rm=true "$tag" --version
