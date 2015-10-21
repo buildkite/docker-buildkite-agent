@@ -10,14 +10,17 @@ RUN apt-get update -qq && apt-get install -qqy \
     openssh-client \
     git
 
-# Install Docker & Buildkite
+# Install Docker
 RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D && \
     echo 'deb https://apt.dockerproject.org/repo ubuntu-trusty main' > /etc/apt/sources.list.d/docker.list && \
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 32A37959C2FA5C3C99EFBC32A79206696452D198 && \
+    apt-get update -qq && \
+    apt-get install -qqy docker-engine=1.8.2-0~trusty
+
+# Install Buildkite
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 32A37959C2FA5C3C99EFBC32A79206696452D198 && \
     echo 'deb https://apt.buildkite.com/buildkite-agent unstable main' > /etc/apt/sources.list.d/buildkite-agent.list && \
     apt-get update -qq && \
-    apt-get install -qqy docker-engine=1.8.2-0~trusty \
-                         buildkite-agent && \
+    apt-get install -qqy buildkite-agent && \
     mkdir -p /buildkite/hooks /buildkite/builds /buildkite/plugins
 
 # Install the magic wrapper
