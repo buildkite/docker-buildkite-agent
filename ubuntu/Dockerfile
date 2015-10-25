@@ -1,5 +1,6 @@
-FROM ubuntu:trusty
+FROM ubuntu:14.04
 MAINTAINER Tim Lucas <tim@buildkite.com>
+# BK-TAG: ubuntu
 
 RUN apt-get install -y curl openssh-client git && \
     curl -L https://github.com/docker/compose/releases/download/1.4.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \

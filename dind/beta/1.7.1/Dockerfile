@@ -1,39 +1,44 @@
 FROM ubuntu:14.04
+# BK-TAG: beta-dind-1.7.1
+# BK-PRIVILEGED
 
-# Let's start with some basic stuff.
+# https://github.com/docker/docker/blob/master/project/PACKAGERS.md#runtime-dependencies
 RUN apt-get update -qq && apt-get install -qqy \
     apt-transport-https \
     ca-certificates \
-    iptables \
     curl \
+    lxc \
+    iptables \
     openssh-client \
-    git
+    git \
+    --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
-# Install Docker & Buildkite
-RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D && \
-    echo 'deb https://apt.dockerproject.org/repo ubuntu-trusty main' > /etc/apt/sources.list.d/docker.list && \
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 32A37959C2FA5C3C99EFBC32A79206696452D198 && \
-    echo 'deb https://apt.buildkite.com/buildkite-agent beta main' > /etc/apt/sources.list.d/buildkite-agent.list && \
-    apt-get update -qq && \
-    apt-get install -qqy docker-engine=1.7.1-0~trusty \
-                         buildkite-agent
+ENV DIND_COMMIT=4e899d64e020a67ca05f913d354aa8d99a341a7b \
+    DOCKER_BUCKET=get.docker.com \
+    DOCKER_VERSION=1.7.1 \
+    DOCKER_COMPOSE_VERSION=1.4.2
 
-# Install the magic wrapper.
-ADD https://raw.githubusercontent.com/docker/docker/v1.7.1/hack/dind /usr/local/bin/wrapdocker
-RUN chmod +x /usr/local/bin/wrapdocker
+RUN curl -fL "https://raw.githubusercontent.com/docker/docker/${DIND_COMMIT}/hack/dind" -o /usr/local/sbin/dind \
+    && chmod +x /usr/local/sbin/dind
 
-# Install Docker Compose
-RUN curl -L https://github.com/docker/compose/releases/download/1.4.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
+RUN curl -fL "https://${DOCKER_BUCKET}/builds/Linux/x86_64/docker-${DOCKER_VERSION}" -o /usr/local/bin/docker \
+    && chmod +x /usr/local/bin/docker
+
+RUN curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" > /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
 
-RUN mkdir -p /buildkite/hooks /buildkite/builds /buildkite/plugins
-
-ENV BUILDKITE_BUILD_PATH=/buildkite/builds \
-    BUILDKITE_HOOKS_PATH=/buildkite/hooks \
-    BUILDKITE_HOOKS_PATH=/buildkite/plugins
-
-# Internal docker runs out of a volume
 VOLUME /var/lib/docker
+EXPOSE 2375
 
-ENTRYPOINT ["wrapdocker","buildkite-agent"]
+RUN DESTINATION=/buildkite BETA=true bash -c \
+    "`curl -sL https://raw.githubusercontent.com/buildkite/agent/master/install.sh`"
+
+ENV PATH=$PATH:/buildkite/bin \
+    BUILDKITE_BOOTSTRAP_SCRIPT_PATH=/buildkite/bootstrap.sh \
+    BUILDKITE_BUILD_PATH=/buildkite/builds \
+    BUILDKITE_HOOKS_PATH=/buildkite/hooks
+
+ADD docker-entrypoint.sh /usr/local/sbin/docker-entrypoint.sh
+
+ENTRYPOINT ["dind","docker-entrypoint.sh", "buildkite-agent"]
 CMD ["start"]
