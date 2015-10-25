@@ -1,4 +1,6 @@
 FROM ubuntu:14.04
+# BK-TAG: dind-1.7.0
+# BK-PRIVILEGED
 
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md#runtime-dependencies
 RUN apt-get update -qq && apt-get install -qqy \
