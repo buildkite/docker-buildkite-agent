@@ -20,5 +20,7 @@ RUN apk-install curl wget bash git perl openssh-client py-pip py-yaml \
       # Remove any compiled python files (compile on demand):
       `find / -regex '.*\.py[co]'`
 
-ENTRYPOINT ["buildkite-agent"]
+ADD ssh-env-config.sh /usr/local/sbin/ssh-env-config.sh
+
+ENTRYPOINT ["ssh-env-config.sh","buildkite-agent"]
 CMD ["start"]
