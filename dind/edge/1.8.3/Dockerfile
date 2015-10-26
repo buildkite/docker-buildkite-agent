@@ -30,7 +30,7 @@ RUN curl -fL "https://raw.githubusercontent.com/docker/docker/${DIND_COMMIT}/hac
     && chmod +x /usr/local/bin/docker-compose \
     && curl -fL "https://download.buildkite.com/builds/$(uname -s)/$(uname -m)/buildkite-agent-${BUILDKITE_AGENT_VERSION}" -o /usr/local/bin/buildkite-agent \
     && chmod +x /usr/local/bin/buildkite-agent \
-    && curl -fL "https://raw.githubusercontent.com/buildkite/container-tools/master/ssh-env-config/ssh-env-config.sh" -o /usr/local/bin/ssh-env-config.sh \
+    && curl -fL "https://raw.githubusercontent.com/buildkite/docker-ssh-env-config/master/ssh-env-config.sh" -o /usr/local/bin/ssh-env-config.sh \
     && chmod +x /usr/local/bin/ssh-env-config.sh
 
 ADD docker-entrypoint.sh /usr/local/sbin/docker-entrypoint.sh

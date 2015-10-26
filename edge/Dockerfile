@@ -15,7 +15,7 @@ RUN apk-install curl wget bash git perl openssh-client py-pip py-yaml \
     && curl -fL "https://download.buildkite.com/builds/Linux/386/buildkite-agent-${BUILDKITE_AGENT_VERSION}" -o /usr/local/bin/buildkite-agent \
     && chmod +x /usr/local/bin/buildkite-agent \
     # Install the SSH config wrapper
-    && curl -fL "https://raw.githubusercontent.com/buildkite/container-tools/master/ssh-env-config/ssh-env-config.sh" -o /usr/local/bin/ssh-env-config.sh \
+    && curl -fL "https://raw.githubusercontent.com/buildkite/docker-ssh-env-config/master/ssh-env-config.sh" -o /usr/local/bin/ssh-env-config.sh \
     && chmod +x /usr/local/bin/ssh-env-config.sh \
     # Clean up
     && rm -rf \
