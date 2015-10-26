@@ -1,9 +1,9 @@
 FROM ubuntu:14.04
 MAINTAINER Tim Lucas <tim@buildkite.com>
-# BK-TAG: experimental-ubuntu
+# BK-TAG: edge-ubuntu
 
 ENV DOCKER_COMPOSE_VERSION=1.4.2 \
-    BUILDKITE_AGENT_VERSION=master \
+    BUILDKITE_AGENT_VERSION=edge \
     BUILDKITE_BUILD_PATH=/buildkite/builds \
     BUILDKITE_HOOKS_PATH=/buildkite/hooks \
     BUILDKITE_PLUGINS_PATH=/buildkite/plugins

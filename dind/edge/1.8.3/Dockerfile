@@ -1,5 +1,5 @@
 FROM ubuntu:14.04
-# BK-TAG: experimental-dind-1.8.3
+# BK-TAG: edge-dind-1.8.3
 # BK-PRIVILEGED
 
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md#runtime-dependencies
@@ -17,7 +17,7 @@ ENV DIND_COMMIT=4e899d64e020a67ca05f913d354aa8d99a341a7b \
     DOCKER_BUCKET=get.docker.com \
     DOCKER_VERSION=1.8.3 \
     DOCKER_COMPOSE_VERSION=1.4.2 \
-    BUILDKITE_AGENT_VERSION=master \
+    BUILDKITE_AGENT_VERSION=edge \
     BUILDKITE_BUILD_PATH=/buildkite/builds \
     BUILDKITE_HOOKS_PATH=/buildkite/hooks \
     BUILDKITE_PLUGINS_PATH=/buildkite/plugins
