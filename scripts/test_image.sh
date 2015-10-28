@@ -43,10 +43,13 @@ PRIVILEGED=$(./scripts/helpers/extract_privileged.sh "${DOCKER_FILE}")
 docker run -it --rm=true --privileged="${PRIVILEGED}" "${DOCKER_IMAGE_NAME}" --version
 
 if [[ "${DOCKER_IMAGE_NAME}" =~ dind ]] ; then
-  echo "--- :hammer: Checking docker-in-docker for ${DOCKER_IMAGE_NAME}"
-  docker run -it --rm=true --privileged \
-    --entrypoint dind  "${DOCKER_IMAGE_NAME}" \
-    docker-entrypoint.sh docker version
+  echo "--- :hammer: Checking docker-in-docker defaults for ${DOCKER_IMAGE_NAME}"
+  DOCKER_INFO_OUTPUT=$(\
+    docker run -it --rm=true --privileged --entrypoint dind \
+      "${DOCKER_IMAGE_NAME}" \
+      docker-entrypoint.sh docker info)
+
+  echo "$DOCKER_INFO_OUTPUT" | grep 'vfs' || echo "VFS not found in: $DOCKER_INFO_OUTPUT" && exit 1
 fi
 
 echo -e "\033[33;32mLooks good!\033[0m"
