@@ -11,6 +11,7 @@
 # "buildkite-agent-test".
 
 set -eu
+set -o pipefail
 
 DOCKER_DIR="$1"
 DOCKER_FILE="${DOCKER_DIR}/Dockerfile"
@@ -40,5 +41,12 @@ echo "--- :hammer: Testing ${DOCKER_IMAGE_NAME}"
 PRIVILEGED=$(./scripts/helpers/extract_privileged.sh "${DOCKER_FILE}")
 
 docker run -it --rm=true --privileged="${PRIVILEGED}" "${DOCKER_IMAGE_NAME}" --version
+
+if [[ "${DOCKER_IMAGE_NAME}" =~ dind ]] ; then
+  echo "--- :hammer: Checking docker-in-docker for ${DOCKER_IMAGE_NAME}"
+  docker run -it --rm=true --privileged \
+    --entrypoint dind  "${DOCKER_IMAGE_NAME}" \
+    docker-entrypoint.sh docker version
+fi
 
 echo -e "\033[33;32mLooks good!\033[0m"
