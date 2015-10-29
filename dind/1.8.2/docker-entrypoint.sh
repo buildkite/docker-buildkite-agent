@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
-: ${DOCKER_DAEMON_ARGS="--storage-driver=vfs -H unix:///var/run/docker.sock"}
+: ${DOCKER_STORAGE_DRIVER="vfs"}
+: ${DOCKER_DAEMON_ARGS="--storage-driver=$DOCKER_STORAGE_DRIVER -H unix:///var/run/docker.sock"}
 
 docker daemon $DOCKER_DAEMON_ARGS &
 
