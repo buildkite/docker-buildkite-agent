@@ -1,8 +1,5 @@
 #!/bin/bash -e
 
-: ${DOCKER_STORAGE_DRIVER="vfs"}
-: ${DOCKER_DAEMON_ARGS="--storage-driver=$DOCKER_STORAGE_DRIVER -H unix:///var/run/docker.sock"}
-
 docker daemon $DOCKER_DAEMON_ARGS &
 
 (( timeout = 60 + SECONDS ))
