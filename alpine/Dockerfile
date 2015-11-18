@@ -1,14 +1,14 @@
-FROM ubuntu:14.04
+FROM gliderlabs/alpine:3.2
 MAINTAINER Tim Lucas <tim@buildkite.com>
 
-RUN apt-get install -y curl openssh-client git \
-    && apt-get clean
+RUN apk-install curl wget bash git perl openssh-client \
+    && rm -rf /var/cache/apk/* /root/.cache
 
 ARG BUILDKITE_AGENT_VERSION=stable
 ENV BUILDKITE_AGENT_VERSION=${BUILDKITE_AGENT_VERSION} \
     BUILDKITE_BUILD_PATH=/buildkite/builds \
     BUILDKITE_HOOKS_PATH=/buildkite/hooks \
-    BUILDKITE_PLUGINS_PATH=/buildkite/plugins \
+    BUILDKITE_BOOTSTRAP_SCRIPT_PATH=/buildkite/bootstrap.sh \
     PATH=$PATH:/buildkite/bin
 
 COPY ./scripts/docker/* /tmp/

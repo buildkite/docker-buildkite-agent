@@ -1,4 +1,2 @@
-FROM buildkite/agent:edge-dind-1.7.1
+FROM buildkite/agent:edge-dind-1.7
 MAINTAINER Tim Lucas <tim@buildkite.com>
-# BK-TAG: ecs
-# BK-PRIVILEGED
