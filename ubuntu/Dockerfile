@@ -1,10 +1,13 @@
-FROM ubuntu:14.04
+FROM ubuntu-debootstrap:14.04
 MAINTAINER Tim Lucas <tim@buildkite.com>
 
-RUN apt-get install -y curl openssh-client git \
+ARG BUILDKITE_AGENT_VERSION=stable
+LABEL com.buildkite.distro="ubuntu" \
+    com.buildkite.version=${BUILDKITE_AGENT_VERSION}
+
+RUN apt-get update -yqq && apt-get install -y curl openssh-client git iptables aufs-tools \
     && apt-get clean
 
-ARG BUILDKITE_AGENT_VERSION=stable
 ENV BUILDKITE_AGENT_VERSION=${BUILDKITE_AGENT_VERSION} \
     BUILDKITE_BUILD_PATH=/buildkite/builds \
     BUILDKITE_HOOKS_PATH=/buildkite/hooks \
@@ -13,7 +16,8 @@ ENV BUILDKITE_AGENT_VERSION=${BUILDKITE_AGENT_VERSION} \
 
 COPY ./scripts/docker/* /tmp/
 RUN /tmp/install_buildkite.sh ${BUILDKITE_AGENT_VERSION} \
+    && cp /tmp/entrypoint.sh /usr/local/bin/entrypoint.sh \
     && rm -rf /tmp/*
 
-ENTRYPOINT ["/usr/local/bin/ssh-env-config.sh", "buildkite-agent"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh", "buildkite-agent"]
 CMD ["start"]

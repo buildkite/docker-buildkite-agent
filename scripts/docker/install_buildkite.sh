@@ -1,6 +1,8 @@
 #!/bin/bash -eu
 
 : ${SSH_ENV_CONFIG_COMMIT="master"}
+: ${OS=$(uname -s)}
+: ${ARCH=$(uname -m)}
 
 install_ssh_env_config() {
   curl -fL "https://raw.githubusercontent.com/buildkite/docker-ssh-env-config/${SSH_ENV_CONFIG_COMMIT}/ssh-env-config.sh" -o /usr/local/bin/ssh-env-config.sh
@@ -12,7 +14,8 @@ install_beta() {
 }
 
 install_edge() {
-  curl -fL "https://download.buildkite.com/builds/$(uname -s)/$(uname -m)/buildkite-agent-edge" -o /usr/local/bin/buildkite-agent
+
+  curl -fL "https://download.buildkite.com/builds/$OS/$ARCH/buildkite-agent-edge" -o /usr/local/bin/buildkite-agent
   chmod +x /usr/local/bin/buildkite-agent
 }
 
