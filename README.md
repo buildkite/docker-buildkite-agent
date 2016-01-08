@@ -1,12 +1,16 @@
 # buildkite-agent
 
-Docker images for the [Buildkite Agent](https://github.com/buildkite/agent). There is a minimal Alpine Linux based image suitable for running Docker-based builds, and a larger Ubuntu based image.
+Docker images for the [Buildkite Agent](https://github.com/buildkite/agent). A variety of builds are provided, based on the version of Buildkite, the base operating system and whether docker and docker-compose is installed on the image.
 
-List of all available tags are at https://hub.docker.com/r/buildkite/agent/tags/
+At present we support these tags:
 
-## Alpine Linux
+ * `latest`, `alpine`, `ubuntu`, `ubuntu-docker`, `ubuntu-docker-1.9`, `ubuntu-docker-1.8`, `ubuntu-docker-1.7`, `ubuntu-docker-1.6`
+ * `beta`, `beta-alpine`, `beta-ubuntu`, `beta-ubuntu-docker`, `beta-ubuntu-docker-1.9`, `beta-ubuntu-docker-1.8`, `beta-ubuntu-docker-1.7`, `beta-ubuntu-docker-1.6`
+ * `edge`, `edge-alpine`, `edge-ubuntu`, `edge-ubuntu-docker`, `edge-ubuntu-docker-1.9`, `edge-ubuntu-docker-1.8`, `edge-ubuntu-docker-1.7`, `edge-ubuntu-docker-1.6`
 
-This default image is based off Alpine Linux and includes git and Docker Compose. Its minimal footprint and small size makes it ideal for running agents that do Docker-based builds.
+## Basic example
+
+For most simple cases, we recommend our minimal Alpine Linux based build. It has a minimal footprint and the latest docker client installed.
 
 ```bash
 docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent
@@ -14,7 +18,7 @@ docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent
 
 ## Ubuntu
 
-This image is based on Ubuntu 14.04 and includes git and Docker Compose. Use this if you need a full Ubuntu environment.
+This image is based on Ubuntu 14.04 and includes git and docker-compose. Use this if you need a full Ubuntu environment.
 
 ```bash
 docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:ubuntu
@@ -22,11 +26,13 @@ docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:ubuntu
 
 ## Docker-in-Docker
 
-This image is identical to the Ubuntu image, except that it has docker running inside it. This requires the `--privileged` flag and is extremely experimental.
+This image is identical to the Ubuntu image, except that it has docker running inside it. This requires the `--privileged` flag.
 
 ```bash
-docker run -it --privileged -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:dind
+docker run -it --privileged -e DIND=true -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:ubuntu-docker
 ```
+
+If you simply want to use the docker client in a docker image, you can drop the `DIND` environment and the `--privileged` flag.
 
 ## Adding Hooks
 
@@ -44,34 +50,8 @@ Almost all agent settings can be set with environment variables. Alternatively y
 
 ```
 FROM buildkite/agent
-
 ADD buildkite-agent.cfg /buildkite/buildkite-agent.cfg
-
 ENV BUILDKITE_AGENT_CONFIG=/buildkite/buildkite-agent.cfg
-```
-
-## Docker-based Builds
-
-If you want each build to be isolated within its own Docker container, you have two options. The safest route is to use the same docker daemon which is running the agent to run containerized builds:
-
-```bash
-docker run -it \
-           -e BUILDKITE_AGENT_TOKEN=xxx \
-           -v `which docker`:/usr/bin/docker \
-           -v /var/run/docker.sock:/var/run/docker.sock \
-           -v /buildkite/builds:/buildkite/builds \
-           buildkite/agent
-```
-
-Note that `/buildkite/builds` is mounted in so that there is path parity between the agent container and the host system. This is because the container refers to the host system's docker, so any volume mounts need to be based on the host systems filesystem.
-
-The alternative is docker-in-docker which runs a docker environment within the agent's container. The upside of this is that it's much conceptually simpler and path mapping isn't required. The downside is that it's an experimental side project of the docker team and needs to be run with the `--privileged` flag.
-
-```bash
-docker run -it \
-           --privileged \
-           -e BUILDKITE_AGENT_TOKEN=xxx \
-           buildkite/agent:dind
 ```
 
 ## Third Party Images
