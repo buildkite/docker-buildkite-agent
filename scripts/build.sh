@@ -36,34 +36,34 @@ cd $(dirname $0)/../
 # read the images to build from list.sh
 scripts/list.sh | while read line ; do
   tokens=($line)
-  image=${tokens[0]}
+  tag=${tokens[0]}
   base=${tokens[1]}
   distro=${tokens[2]}
   version=${tokens[3]}
   docker=${tokens[4]:-'n/a'}
 
-  echo -e "\n--- Building buildkite/$image"
+  echo -e "\n--- Building $tag"
 
   ## build base images (without docker)
   if [[ $docker == 'n/a' ]] ; then
     docker build \
-      --build-arg BUILDKITE_AGENT_VERSION=$version --tag buildkite/$image \
+      --build-arg BUILDKITE_AGENT_VERSION=$version --tag "buildkite/agent:$tag" \
       -f $distro/Dockerfile .
 
   # build variants with docker from Dockerfile.docker-template
   else
-    dockerfile_from "$distro/Dockerfile.docker-template" "buildkite/$base" > dockerfile.tmp
+    dockerfile_from "$distro/Dockerfile.docker-template" "buildkite/agent:$base" > dockerfile.tmp
     docker build \
       --build-arg DOCKER_VERSION=$docker \
       --build-arg DOCKER_COMPOSE_VERSION=$(docker_compose_version_from_docker $docker) \
-      --tag buildkite/$image \
+      --tag "buildkite/agent:$tag" \
       -f dockerfile.tmp .
     rm dockerfile.tmp
 
-    tag=$(sed "s/$docker/$(docker_major_version $docker)/" <<< $image)
+    major_tag=$(sed "s/$docker/$(docker_major_version $docker)/" <<< "$tag")
 
-    echo -e "\n~~~ Tagging buildkite/$image as buildkite/$tag"
-    docker tag -f buildkite/$image buildkite/$tag
+    echo -e "\nTagging $tag as $major_tag"
+    docker tag -f "buildkite/agent:$tag" "buildkite/$major_tag"
   fi
 done
 
