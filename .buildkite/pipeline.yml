@@ -7,5 +7,7 @@ steps:
   - wait
   - command: scripts/release.sh
     name: "Push images to DockerHub :rocket:"
-    branches: [master, ci-pipeline]
+    branches:
+      - master
+      - ci-pipeline
 
