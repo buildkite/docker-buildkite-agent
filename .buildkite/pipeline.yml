@@ -1,12 +1,18 @@
 steps:
   - command: scripts/build.sh
     name: "Build :docker: images"
+    agents:
+      queue: docker-builder
 
   - wait
   - command: scripts/test_all_images.sh
     name: "Test :allthethings:"
+    agents:
+      queue: docker-builder
 
   - wait
   - command: scripts/release.sh
     name: "Push images to DockerHub :rocket:"
     branches: "master ci-pipeline"
+    agents:
+      queue: docker-builder
