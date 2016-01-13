@@ -1,4 +1,4 @@
-FROM buildkite/agent
+FROM buildkite/agent:ubuntu
 MAINTAINER Tim Lucas <tim@buildkite.com>
 # BK-TAG: beta-ubuntu
 
