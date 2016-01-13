@@ -1,2 +1,2 @@
 steps:
-  - command: ls
+  - command: scripts/build.sh
