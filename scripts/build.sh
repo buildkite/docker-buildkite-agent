@@ -62,7 +62,7 @@ scripts/list.sh | while read line ; do
 
     tag=$(sed "s/$docker/$(docker_major_version $docker)/" <<< $image)
 
-    echo -e "\n--- Tagging buildkite/$image as buildkite/$tag"
+    echo -e "\n~~~ Tagging buildkite/$image as buildkite/$tag"
     docker tag -f buildkite/$image buildkite/$tag
   fi
 done
