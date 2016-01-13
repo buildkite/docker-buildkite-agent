@@ -1,4 +1,6 @@
-#!/bin/bash -euo pipefail
+#!/bin/bash
+
+set -euo pipefail
 
 scripts/list.sh | while read line ; do
   tokens=($line)

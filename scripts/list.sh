@@ -1,4 +1,6 @@
-#!/bin/bash -euo pipefail
+#!/bin/bash
+
+set -euo pipefail
 
 ## Prints supported image combinations in the following format
 ## {image_name} {base_image} {distro} {buildkite_version} {docker_version}
