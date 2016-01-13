@@ -1,2 +1,11 @@
 steps:
   - command: scripts/build.sh
+    name: "Build :docker: images"
+  - wait
+  - command: scripts/test_all_images.sh
+    name: "Test :allthethings:"
+  - wait
+  - command: echo release
+    name: "Push images to DockerHub :rocket:"
+    branches: master
+
