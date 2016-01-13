@@ -16,6 +16,14 @@ dockerfile_from() {
   printf 'FROM %s\n%s' "$from" "$(<$dockerfile)"
 }
 
+gsort() {
+  if [[ "$OSTYPE" =~ ^darwin ]] ; then
+    gsort $@
+  else
+    sort $@
+  fi
+}
+
 # Returns whether a version number (x.x.x) is greater than another
 version_gt() {
   test "$(echo "$@" | tr " " "\n" | gsort -V | tail -n 1)" == "$1"
