@@ -1,20 +1,12 @@
 steps:
   - command: scripts/build.sh
     name: "Build :docker: images"
-    agents:
-      name: "$BUILDKITE_AGENT_META_DATA_NAME"
 
   - wait
   - command: scripts/test_all_images.sh
     name: "Test :allthethings:"
-    agents:
-      name: "$BUILDKITE_AGENT_META_DATA_NAME"
 
   - wait
   - command: scripts/release.sh
     name: "Push images to DockerHub :rocket:"
     branches: "master ci-pipeline"
-    agents:
-      name: "$BUILDKITE_AGENT_META_DATA_NAME"
-
-
