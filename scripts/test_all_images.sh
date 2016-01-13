@@ -8,4 +8,4 @@ scripts/list.sh | while read line ; do
   ./scripts/test_image.sh "buildkite/$image"
 done
 
-echo -e "\033[33;32mAll images look good!\033[0m"
+echo -e "\033[33;32m--- All images pass tests!\033[0m"

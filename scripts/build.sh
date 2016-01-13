@@ -66,3 +66,5 @@ scripts/list.sh | while read line ; do
     docker tag -f buildkite/$image buildkite/$tag
   fi
 done
+
+echo -e "\033[33;32m--- All images built!\033[0m"

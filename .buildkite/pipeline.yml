@@ -5,7 +5,7 @@ steps:
   - command: scripts/test_all_images.sh
     name: "Test :allthethings:"
   - wait
-  - command: echo release
+  - command: scripts/release.sh
     name: "Push images to DockerHub :rocket:"
-    branches: master
+    branches: [master, ci-pipeline]
 
