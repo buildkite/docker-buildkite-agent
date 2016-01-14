@@ -13,4 +13,9 @@ if [[ -n "$DIND" && "$DIND" != 'false' ]] ; then
   done
 fi
 
+# Older buildkite versions used a bash bootstrap
+if [[ -e /buildkite/bootstrap.sh ]] ; then
+  export BUILDKITE_BOOTSTRAP_SCRIPT_PATH=/buildkite/bootstrap.sh
+fi
+
 exec /usr/local/bin/ssh-env-config.sh "$@"

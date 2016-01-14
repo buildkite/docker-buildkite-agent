@@ -1,4 +1,4 @@
-FROM ubuntu-debootstrap:14.04
+FROM krallin/ubuntu-tini:trusty
 MAINTAINER Tim Lucas <tim@buildkite.com>
 
 ARG BUILDKITE_AGENT_VERSION=stable
@@ -19,5 +19,5 @@ RUN /tmp/install_buildkite.sh ${BUILDKITE_AGENT_VERSION} \
     && cp /tmp/entrypoint.sh /usr/local/bin/entrypoint.sh \
     && rm -rf /tmp/*
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh", "buildkite-agent"]
+ENTRYPOINT ["/usr/local/bin/tini", "-vg", "--", "/usr/local/bin/entrypoint.sh", "buildkite-agent"]
 CMD ["start"]

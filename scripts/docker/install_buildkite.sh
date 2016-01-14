@@ -14,7 +14,6 @@ install_beta() {
 }
 
 install_edge() {
-
   curl -fL "https://download.buildkite.com/builds/$OS/$ARCH/buildkite-agent-edge" -o /usr/local/bin/buildkite-agent
   chmod +x /usr/local/bin/buildkite-agent
 }

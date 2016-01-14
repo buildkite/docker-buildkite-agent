@@ -1,17 +1,22 @@
-#!/bin/bash -euo pipefail
+#!/bin/bash
+
+set -euo pipefail
 
 ## Builds the all the images defined by list.sh
-
-# Returns the major version for a given X.X.X docker version
-docker_major_version() {
-  cut -d. -f1-2 <<< $1
-}
 
 # Combines a dockerfile template with a generated FROM line
 dockerfile_from() {
   local dockerfile="$1"
   local from="$2"
   printf 'FROM %s\n%s' "$from" "$(<$dockerfile)"
+}
+
+gsort() {
+  if [[ "$OSTYPE" =~ ^darwin ]] ; then
+    /usr/local/bin/gsort $@
+  else
+    sort $@
+  fi
 }
 
 # Returns whether a version number (x.x.x) is greater than another
@@ -34,33 +39,37 @@ cd $(dirname $0)/../
 # read the images to build from list.sh
 scripts/list.sh | while read line ; do
   tokens=($line)
-  image=${tokens[0]}
+  tag=${tokens[0]}
   base=${tokens[1]}
   distro=${tokens[2]}
   version=${tokens[3]}
   docker=${tokens[4]:-'n/a'}
+  extratags=${tokens[@]:5}
 
-  echo -e "\n--- Building buildkite/$image"
+  echo -e "\n--- Building $tag"
+  echo "Tag: $tag Base: $base Distro: $distro Version: $version Docker: $docker Aliases: $extratags"
 
   ## build base images (without docker)
   if [[ $docker == 'n/a' ]] ; then
     docker build \
-      --build-arg BUILDKITE_AGENT_VERSION=$version --tag buildkite/$image \
+      --build-arg BUILDKITE_AGENT_VERSION=$version --tag "buildkite/agent:$tag" \
       -f $distro/Dockerfile .
-
   # build variants with docker from Dockerfile.docker-template
   else
-    dockerfile_from "$distro/Dockerfile.docker-template" "buildkite/$base" > dockerfile.tmp
+    dockerfile_from "$distro/Dockerfile.docker-template" "buildkite/agent:$base" > dockerfile.tmp
     docker build \
       --build-arg DOCKER_VERSION=$docker \
       --build-arg DOCKER_COMPOSE_VERSION=$(docker_compose_version_from_docker $docker) \
-      --tag buildkite/$image \
+      --tag "buildkite/agent:$tag" \
       -f dockerfile.tmp .
     rm dockerfile.tmp
-
-    tag=$(sed "s/$docker/$(docker_major_version $docker)/" <<< $image)
-
-    echo -e "\n--- Tagging buildkite/$image as buildkite/$tag"
-    docker tag -f buildkite/$image buildkite/$tag
   fi
+
+  # add extra tags
+  for tagalias in ${extratags[@]} ; do
+    echo "Tagging buildkite/agent:$tag as buildkite/agent:$tagalias"
+    docker tag -f "buildkite/agent:$tag" "buildkite/agent:$tagalias"
+  done
 done
+
+echo -e "\033[33;32m--- All images built!\033[0m"
