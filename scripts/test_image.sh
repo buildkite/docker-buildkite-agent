@@ -20,7 +20,7 @@ query_bk_agent_api() {
 }
 
 DOCKER_IMAGE_NAME="$1"
-BUILD_ID=${BUILDKITE_BUILD_ID:-dev$$}
+BUILD_ID="${DOCKER_IMAGE_NAME}-${BUILDKITE_BUILD_ID:-dev$$}"
 
 echo "--- :hammer: Testing ${DOCKER_IMAGE_NAME}"
 
