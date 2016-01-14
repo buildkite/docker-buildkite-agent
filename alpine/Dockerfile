@@ -16,7 +16,6 @@ RUN apk add --update --repository http://dl-1.alpinelinux.org/alpine/edge/testin
 ENV BUILDKITE_AGENT_VERSION=${BUILDKITE_AGENT_VERSION} \
     BUILDKITE_BUILD_PATH=/buildkite/builds \
     BUILDKITE_HOOKS_PATH=/buildkite/hooks \
-    BUILDKITE_BOOTSTRAP_SCRIPT_PATH=/buildkite/bootstrap.sh \
     PATH=$PATH:/buildkite/bin
 
 COPY ./scripts/docker/* /tmp/
