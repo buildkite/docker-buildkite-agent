@@ -14,7 +14,7 @@ if [[ -n "$DIND" && "$DIND" != 'false' ]] ; then
 fi
 
 # Older buildkite versions used a bash bootstrap
-if [[ -f /buildkite/bootstrap.sh ]] ; then
+if [[ -e /buildkite/bootstrap.sh ]] ; then
   export BUILDKITE_BOOTSTRAP_SCRIPT_PATH=/buildkite/bootstrap.sh
 fi
 
