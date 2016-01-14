@@ -28,21 +28,27 @@ docker images "${DOCKER_IMAGE_NAME}"
 docker run --rm "${DOCKER_IMAGE_NAME}" --version
 
 if [[ -n $(docker_label $DOCKER_IMAGE_NAME "com.buildkite.docker_version") ]] ; then
-  echo "--- :hammer: Checking docker client for ${DOCKER_IMAGE_NAME}"
+  echo "Checking docker client for ${DOCKER_IMAGE_NAME}"
   docker run --rm --entrypoint "docker" "${DOCKER_IMAGE_NAME}" --version
+else
+  echo Skipping docker checks
 fi
 
 if [[ -n $(docker_label $DOCKER_IMAGE_NAME "com.buildkite.docker_compose_version") ]] ; then
-  echo "--- :hammer: Checking docker-compose client for ${DOCKER_IMAGE_NAME}"
+  echo "Checking docker-compose client for ${DOCKER_IMAGE_NAME}"
   docker run --rm --entrypoint "docker-compose" "${DOCKER_IMAGE_NAME}" --version
+else
+  echo Skipping docker-compose checks
 fi
 
 if [[ $(docker_label $DOCKER_IMAGE_NAME "com.buildkite.docker_dind") == "true" ]] ; then
-  echo "--- :hammer: Checking docker-in-docker for ${DOCKER_IMAGE_NAME}"
+  echo "Checking docker-in-docker for ${DOCKER_IMAGE_NAME}"
   docker run --rm -e DIND=true --privileged --entrypoint "entrypoint.sh" "${DOCKER_IMAGE_NAME}" docker info
+else
+  echo Skipping docker in docker checks
 fi
 
-echo "--- :hammer: Checking buildkite agent phones home"
+echo "Checking buildkite agent phones home"
 cidfile="${DOCKER_IMAGE_NAME#*:}.cid"
 trap "docker rm -fv \$(cat $cidfile) >/dev/null; rm $cidfile" EXIT
 
