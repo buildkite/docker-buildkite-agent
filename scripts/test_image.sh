@@ -24,52 +24,50 @@ BUILD_ID="${DOCKER_IMAGE_NAME}-${BUILDKITE_BUILD_ID:-dev$$}"
 
 echo "--- :hammer: Testing ${DOCKER_IMAGE_NAME}"
 
-echo ">>> Buildkite version: "
+echo ">> Buildkite version: "
 docker run --rm --entrypoint "buildkite-agent" "${DOCKER_IMAGE_NAME}" --version
 echo -e "\033[33;32mOk\033[0m"
 
 if [[ -n $(docker_label $DOCKER_IMAGE_NAME "com.buildkite.docker_version") ]] ; then
-  echo -e "\n>> Checking docker client for ${DOCKER_IMAGE_NAME}"
+  echo -e ">> Checking docker client for ${DOCKER_IMAGE_NAME}"
   docker run --rm --entrypoint "docker" "${DOCKER_IMAGE_NAME}" --version
   echo -e "\033[33;32mOk\033[0m"
 else
-  echo -e "\n>> Skipping docker checks"
+  echo -e ">> Skipping docker checks"
 fi
 
 if [[ -n $(docker_label $DOCKER_IMAGE_NAME "com.buildkite.docker_compose_version") ]] ; then
-  echo -e "\n>> Checking docker-compose client for ${DOCKER_IMAGE_NAME}"
+  echo -e ">> Checking docker-compose client for ${DOCKER_IMAGE_NAME}"
   docker run --rm --entrypoint "docker-compose" "${DOCKER_IMAGE_NAME}" --version
   echo -e "\033[33;32mOk\033[0m"
 else
-  echo -e "\n>>Skipping docker-compose checks"
+  echo -e ">>Skipping docker-compose checks"
 fi
 
 if [[ $(docker_label $DOCKER_IMAGE_NAME "com.buildkite.docker_dind") == "true" ]] ; then
-  echo -e "\n>> Checking docker-in-docker for ${DOCKER_IMAGE_NAME}"
+  echo -e ">> Checking docker-in-docker for ${DOCKER_IMAGE_NAME}"
   docker run --rm -e DIND=true --privileged --entrypoint "entrypoint.sh" "${DOCKER_IMAGE_NAME}" docker info
   echo -e "\033[33;32mOk\033[0m"
 else
-  echo -e "\n>> Skipping docker-in-docker checks"
+  echo -e ">> Skipping docker-in-docker checks"
 fi
 
 echo -e ">> Checking buildkite agent phones home"
 cidfile="${DOCKER_IMAGE_NAME#*:}.cid"
-trap "docker rm -fv \$(cat $cidfile) >/dev/null; rm $cidfile" EXIT
+trap "docker stop \$(cat $cidfile); docker rm -fv \$(cat $cidfile) >/dev/null; rm $cidfile" EXIT
 
 docker run -d --cidfile $cidfile ${DOCKER_IMAGE_NAME} \
   start --name "$BUILD_ID" --token "$BUILDKITE_DOCKER_INTEGRATION_TEST_AGENT_TOKEN" >/dev/null
 
 for run in {1..10} ; do
   sleep 1
-  if query_bk_agent_api "?name=$BUILD_ID" > /dev/null ; then
+  if query_bk_agent_api "?name=$BUILD_ID" | grep -q '"connection_state": "connected"' > /dev/null ; then
     break
   fi
 done
 
-docker stop $(cat $cidfile)
-
 if ! query_bk_agent_api "?name=$BUILD_ID" | grep -C 20 --color=always '"connection_state": "connected"' ; then
-  echo "Agent didn't connect to buildkite, showing container logs"
+  echo -e "\033[33;31mAgent failed to connect to buildkite\033[0m"
   docker logs $(cat $cidfile)
   exit 1
 fi
