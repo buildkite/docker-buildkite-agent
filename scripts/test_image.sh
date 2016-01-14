@@ -56,6 +56,8 @@ for run in {1..10} ; do
   fi
 done
 
+docker stop $(cat $cidfile)
+
 if ! query_bk_agent_api "?name=$BUILD_ID" | grep -C 20 --color=always '"connection_state": "connected"' ; then
   echo "Agent didn't connect to buildkite, showing container logs"
   docker logs $(cat $cidfile)
