@@ -4,11 +4,6 @@ set -euo pipefail
 
 ## Builds the all the images defined by list.sh
 
-# Returns the major version for a given X.X.X docker version
-docker_major_version() {
-  cut -d. -f1-2 <<< $1
-}
-
 # Combines a dockerfile template with a generated FROM line
 dockerfile_from() {
   local dockerfile="$1"
@@ -18,7 +13,7 @@ dockerfile_from() {
 
 gsort() {
   if [[ "$OSTYPE" =~ ^darwin ]] ; then
-    gsort $@
+    /usr/local/bin/gsort $@
   else
     sort $@
   fi
@@ -49,15 +44,16 @@ scripts/list.sh | while read line ; do
   distro=${tokens[2]}
   version=${tokens[3]}
   docker=${tokens[4]:-'n/a'}
+  extratags=${tokens[@]:5}
 
   echo -e "\n--- Building $tag"
+  echo "Tag: $tag Base: $base Distro: $distro Version: $version Docker: $docker Aliases: $extratags"
 
   ## build base images (without docker)
   if [[ $docker == 'n/a' ]] ; then
     docker build \
       --build-arg BUILDKITE_AGENT_VERSION=$version --tag "buildkite/agent:$tag" \
       -f $distro/Dockerfile .
-
   # build variants with docker from Dockerfile.docker-template
   else
     dockerfile_from "$distro/Dockerfile.docker-template" "buildkite/agent:$base" > dockerfile.tmp
@@ -67,12 +63,13 @@ scripts/list.sh | while read line ; do
       --tag "buildkite/agent:$tag" \
       -f dockerfile.tmp .
     rm dockerfile.tmp
-
-    major_tag=$(sed "s/$docker/$(docker_major_version $docker)/" <<< "$tag")
-
-    echo -e "\nTagging $tag as $major_tag"
-    docker tag -f "buildkite/agent:$tag" "buildkite/$major_tag"
   fi
+
+  # add extra tags
+  for tagalias in ${extratags[@]} ; do
+    echo "Tagging buildkite/agent:$tag as buildkite/agent:$tagalias"
+    docker tag -f "buildkite/agent:$tag" "buildkite/agent:$tagalias"
+  done
 done
 
 echo -e "\033[33;32m--- All images built!\033[0m"
