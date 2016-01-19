@@ -1,6 +1,6 @@
 #!/bin/bash -eu
 
-: ${SSH_ENV_CONFIG_COMMIT="master"}
+: ${SSH_ENV_CONFIG_COMMIT="$2"}
 : ${OS=$(uname -s)}
 : ${ARCH=$(uname -m)}
 

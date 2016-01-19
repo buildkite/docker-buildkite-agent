@@ -2,6 +2,7 @@ FROM gliderlabs/alpine:edge
 MAINTAINER Tim Lucas <tim@buildkite.com>
 
 ARG BUILDKITE_AGENT_VERSION=stable
+ARG SSH_ENV_COMMIT_REF=bf7e6f0
 
 LABEL com.buildkite.distro="alpine" \
     com.buildkite.version=${BUILDKITE_AGENT_VERSION} \
@@ -19,7 +20,7 @@ ENV BUILDKITE_AGENT_VERSION=${BUILDKITE_AGENT_VERSION} \
     PATH=$PATH:/buildkite/bin
 
 COPY ./scripts/docker/* /tmp/
-RUN ARCH=386 /tmp/install_buildkite.sh ${BUILDKITE_AGENT_VERSION} \
+RUN ARCH=386 /tmp/install_buildkite.sh ${BUILDKITE_AGENT_VERSION} ${SSH_ENV_COMMIT_REF} \
     && cp /tmp/entrypoint.sh /usr/local/bin/entrypoint.sh \
     && rm -rf /tmp/*
 
