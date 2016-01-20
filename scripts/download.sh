@@ -38,6 +38,7 @@ mkdir -p assets
 cd assets/
 
 download https://raw.githubusercontent.com/buildkite/docker-ssh-env-config/master/ssh-env-config.sh ssh-env-config.sh
+chmod +x ssh-env-config.sh
 
 download "$(agent_release amd64)" stable-amd64.tar.gz
 rm -rf stable-amd64/
