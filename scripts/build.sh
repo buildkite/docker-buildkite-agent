@@ -36,6 +36,8 @@ docker_compose_version_from_docker() {
 
 cd $(dirname $0)/../
 
+PATTERN=${1:-.+}
+
 # read the images to build from list.sh
 scripts/list.sh | while read line ; do
   tokens=($line)
@@ -46,8 +48,14 @@ scripts/list.sh | while read line ; do
   docker=${tokens[4]:-'n/a'}
   extratags=${tokens[@]:5}
 
+  if [[ ! $tag =~ $PATTERN ]] ; then
+    echo "Ignoring $tag due to pattern of $PATTERN"
+    continue
+  fi
+
   echo -e "\n--- Building $tag"
   echo "Tag: $tag Base: $base Distro: $distro Version: $version Docker: $docker Aliases: $extratags"
+
 
   ## build base images (without docker)
   if [[ $docker == 'n/a' ]] ; then
