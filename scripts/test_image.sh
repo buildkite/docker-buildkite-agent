@@ -5,8 +5,8 @@ set -euo pipefail
 ## Builds and tests the given buildkite-agent image
 ##
 ## Usage:
-##   test_image.sh buildkite/ubuntu
-##   test_image.sh buildkite/beta-ubuntu-docker-1.8.3
+##   test_image.sh buildkite/alpine:ubuntu
+##   test_image.sh buildkite/alpine:beta-ubuntu-docker-1.8.3
 
 docker_label() {
   local image="$1"
