@@ -52,24 +52,27 @@ else
   echo -e ">> Skipping docker-in-docker checks"
 fi
 
-echo -e ">> Checking buildkite agent phones home"
-cidfile="${DOCKER_IMAGE_NAME#*:}.cid"
-trap "docker stop \$(cat $cidfile); docker rm -fv \$(cat $cidfile) >/dev/null; rm $cidfile" EXIT
+if [[ -n "${BUILDKITE_DOCKER_INTEGRATION_TEST_AGENT_TOKEN:-}" ]] ; then
 
-docker run -d --cidfile $cidfile ${DOCKER_IMAGE_NAME} \
-  start --name "$BUILD_ID" --token "$BUILDKITE_DOCKER_INTEGRATION_TEST_AGENT_TOKEN" >/dev/null
+  echo -e ">> Checking buildkite agent phones home"
+  cidfile="${DOCKER_IMAGE_NAME#*:}.cid"
+  trap "docker stop \$(cat $cidfile); docker rm -fv \$(cat $cidfile) >/dev/null; rm $cidfile" EXIT
 
-for run in {1..10} ; do
-  sleep 1
-  if query_bk_agent_api "?name=$BUILD_ID" | grep -q '"connection_state": "connected"' > /dev/null ; then
-    break
+  docker run -d --cidfile $cidfile ${DOCKER_IMAGE_NAME} \
+    start --name "$BUILD_ID" --token "$BUILDKITE_DOCKER_INTEGRATION_TEST_AGENT_TOKEN" >/dev/null
+
+  for run in {1..10} ; do
+    sleep 1
+    if query_bk_agent_api "?name=$BUILD_ID" | grep -q '"connection_state": "connected"' > /dev/null ; then
+      break
+    fi
+  done
+
+  if ! query_bk_agent_api "?name=$BUILD_ID" | grep -C 20 --color=always '"connection_state": "connected"' ; then
+    echo -e "\033[33;31mAgent failed to connect to buildkite\033[0m"
+    docker logs $(cat $cidfile)
+    exit 1
   fi
-done
-
-if ! query_bk_agent_api "?name=$BUILD_ID" | grep -C 20 --color=always '"connection_state": "connected"' ; then
-  echo -e "\033[33;31mAgent failed to connect to buildkite\033[0m"
-  docker logs $(cat $cidfile)
-  exit 1
 fi
 
 echo -e "\033[33;32mLooks good!\033[0m"
