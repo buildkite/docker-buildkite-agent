@@ -1,8 +1,24 @@
 #!/bin/bash -e
 
+
+# Returns whether a version number (x.x.x) is greater than another
+version_gt() {
+  test "$(echo "$@" | tr " " "\n" | sort -V | tail -n 1)" == "$1"
+}
+
 # Run a docker instance in the background if the DIND env is set
 if [[ -n "$DIND" && "$DIND" != 'false' ]] ; then
-  docker -d $DOCKER_DAEMON_ARGS &
+  docker_version=$(docker --version | awk '{print $3}' | sed 's/,//')
+  groupadd docker
+  usermod -a -G docker buildkite-agent
+
+  # Docker daemon changed from -d to daemon
+  if version_gt $docker_version "1.8.0" ; then
+    docker daemon -G docker $DOCKER_DAEMON_ARGS &
+  else
+    docker -d -G docker $DOCKER_DAEMON_ARGS &
+  fi
+
   (( timeout = ${DIND_START_TIMEOUT:-10} + SECONDS ))
   until docker info >/dev/null 2>&1 ; do
     if (( SECONDS >= timeout )); then
