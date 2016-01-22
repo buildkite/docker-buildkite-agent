@@ -13,13 +13,11 @@ RUN apt-get update -yqq && apt-get install -y curl openssh-client git iptables a
 ENV BUILDKITE_AGENT_VERSION=${BUILDKITE_AGENT_VERSION} \
     BUILDKITE_BUILD_PATH=/buildkite/builds \
     BUILDKITE_HOOKS_PATH=/buildkite/hooks \
-    BUILDKITE_PLUGINS_PATH=/buildkite/plugins \
-    PATH=$PATH:/buildkite/bin
+    BUILDKITE_PLUGINS_PATH=/buildkite/plugins
 
-COPY ./scripts/docker/* /tmp/
-RUN /tmp/install_buildkite.sh ${BUILDKITE_AGENT_VERSION} ${SSH_ENV_COMMIT_REF} \
-    && cp /tmp/entrypoint.sh /usr/local/bin/entrypoint.sh \
-    && rm -rf /tmp/*
+COPY ./scripts/docker/entrypoint.sh ./assets/ssh-env-config.sh /usr/local/bin/
+COPY ./assets/${BUILDKITE_AGENT_VERSION}-386 /buildkite
+RUN ln -s /buildkite/buildkite-agent /usr/local/bin/buildkite-agent
 
 ENTRYPOINT ["/usr/local/bin/tini", "-vg", "--", "/usr/local/bin/entrypoint.sh", "buildkite-agent"]
 CMD ["start"]
