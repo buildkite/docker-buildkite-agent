@@ -18,4 +18,5 @@ if [[ -e /buildkite/bootstrap.sh ]] ; then
   export BUILDKITE_BOOTSTRAP_SCRIPT_PATH=/buildkite/bootstrap.sh
 fi
 
-exec /usr/local/bin/ssh-env-config.sh "$@"
+# Run the remainder as the buildkite-agent user
+exec sudo --preserve-env -H -u buildkite-agent /usr/local/bin/ssh-env-config.sh "$@"
