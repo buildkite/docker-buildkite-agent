@@ -28,6 +28,14 @@ echo ">> Buildkite version: "
 docker run --rm --entrypoint "buildkite-agent" "${DOCKER_IMAGE_NAME}" --version
 echo -e "\033[33;32mOk\033[0m"
 
+echo ">> Checking entrypoint drops privileges to buildkite-agent: "
+if ! docker run --rm --entrypoint "/usr/local/bin/entrypoint.sh" "${DOCKER_IMAGE_NAME}" whoami | grep "buildkite-agent" ; then
+  echo -e "\033[33;31mAgent isn't running as buildkite-agent\033[0m"
+  exit 1
+else
+  echo -e "\033[33;32mOk\033[0m"
+fi
+
 if [[ -n $(docker_label $DOCKER_IMAGE_NAME "com.buildkite.docker_version") ]] ; then
   echo -e ">> Checking docker client for ${DOCKER_IMAGE_NAME}"
   docker run --rm --entrypoint "docker" "${DOCKER_IMAGE_NAME}" --version
@@ -41,7 +49,7 @@ if [[ -n $(docker_label $DOCKER_IMAGE_NAME "com.buildkite.docker_compose_version
   docker run --rm --entrypoint "docker-compose" "${DOCKER_IMAGE_NAME}" --version
   echo -e "\033[33;32mOk\033[0m"
 else
-  echo -e ">>Skipping docker-compose checks"
+  echo -e ">> Skipping docker-compose checks"
 fi
 
 if [[ $(docker_label $DOCKER_IMAGE_NAME "com.buildkite.docker_dind") == "true" ]] ; then

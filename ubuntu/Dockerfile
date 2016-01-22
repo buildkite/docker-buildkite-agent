@@ -2,7 +2,6 @@ FROM krallin/ubuntu-tini:trusty
 MAINTAINER Tim Lucas <tim@buildkite.com>
 
 ARG BUILDKITE_AGENT_VERSION=stable
-ARG SSH_ENV_COMMIT_REF=bf7e6f0
 
 LABEL com.buildkite.distro="ubuntu" \
     com.buildkite.version=${BUILDKITE_AGENT_VERSION}
@@ -17,7 +16,9 @@ ENV BUILDKITE_AGENT_VERSION=${BUILDKITE_AGENT_VERSION} \
 
 COPY ./scripts/docker/entrypoint.sh ./assets/ssh-env-config.sh /usr/local/bin/
 COPY ./assets/${BUILDKITE_AGENT_VERSION}-386 /buildkite
-RUN ln -s /buildkite/buildkite-agent /usr/local/bin/buildkite-agent
+RUN ln -s /buildkite/buildkite-agent /usr/local/bin/buildkite-agent \
+    && adduser --system buildkite-agent \
+    && chown -R buildkite-agent: /buildkite
 
 ENTRYPOINT ["/usr/local/bin/tini", "-vg", "--", "/usr/local/bin/entrypoint.sh", "buildkite-agent"]
 CMD ["start"]

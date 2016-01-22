@@ -9,7 +9,7 @@ LABEL com.buildkite.distro="alpine" \
     com.buildkite.docker_compose_version=1.5.1
 
 RUN apk add --update --repository http://dl-1.alpinelinux.org/alpine/edge/testing/ tini \
-     && apk-install curl wget bash git perl openssh-client py-pip py-yaml docker\<1.9.2 \
+     && apk-install sudo curl wget bash git perl openssh-client py-pip py-yaml docker\<1.9.2 \
     && pip install -U pip docker-compose==1.5.1 \
     && rm -rf /tmp/* /root/.cache `find / -regex '.*\.py[co]'`
 
@@ -19,7 +19,9 @@ ENV BUILDKITE_AGENT_VERSION=${BUILDKITE_AGENT_VERSION} \
 
 COPY ./scripts/docker/entrypoint.sh ./assets/ssh-env-config.sh /usr/local/bin/
 COPY ./assets/${BUILDKITE_AGENT_VERSION}-386 /buildkite
-RUN ln -s /buildkite/buildkite-agent /usr/local/bin/buildkite-agent
+RUN ln -s /buildkite/buildkite-agent /usr/local/bin/buildkite-agent \
+    && adduser -S buildkite-agent  \
+    && chown -R buildkite-agent: /buildkite
 
 ENTRYPOINT ["/usr/bin/tini", "-vg", "--", "/usr/local/bin/entrypoint.sh", "buildkite-agent"]
 CMD ["start"]
