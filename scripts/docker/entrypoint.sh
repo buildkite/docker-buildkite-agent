@@ -4,7 +4,7 @@
 if [[ -n "$DIND" && "$DIND" != 'false' ]] ; then
 
   # Earlier versions of docker used -d rather than daemon
-  if [[ $(cut -d. -f2 <<< "$DOCKER_VERSION") -lt 10 ]] ; then
+  if [[ $(docker --version | cut -d. -f2) -lt 10 ]] ; then
     cmd="-d"
   fi
 
