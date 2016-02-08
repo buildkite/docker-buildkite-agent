@@ -2,7 +2,13 @@
 
 # Run a docker instance in the background if the DIND env is set
 if [[ -n "$DIND" && "$DIND" != 'false' ]] ; then
-  docker -d $DOCKER_DAEMON_ARGS &
+
+  # Earlier versions of docker used -d rather than daemon
+  if [[ $(cut -d. -f2 <<< "$DOCKER_VERSION") -lt 10 ]] ; then
+    cmd="-d"
+  fi
+
+  docker ${cmd:-daemon} $DOCKER_DAEMON_ARGS &
   (( timeout = ${DIND_START_TIMEOUT:-10} + SECONDS ))
   until docker info >/dev/null 2>&1 ; do
     if (( SECONDS >= timeout )); then
