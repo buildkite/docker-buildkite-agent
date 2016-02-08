@@ -27,7 +27,11 @@ version_gt() {
 # Returns the highest version of docker-compose supported by a given version of docker
 docker_compose_version_from_docker() {
   local docker_version="$1"
-  if version_gt $docker_version "1.7.0" ; then
+  if version_gt $docker_version "1.9.1" ; then
+    echo "1.6.0"
+  elif version_gt $docker_version "1.7.1" ; then
+    echo "1.5.2"
+  elif version_gt $docker_version "1.7.0" ; then
     echo "1.5.1"
   else
     echo "1.3.3"
