@@ -5,12 +5,12 @@ ARG BUILDKITE_AGENT_VERSION=stable
 
 LABEL com.buildkite.distro="alpine" \
     com.buildkite.version=${BUILDKITE_AGENT_VERSION} \
-    com.buildkite.docker_version=1.9.1 \
-    com.buildkite.docker_compose_version=1.5.1
+    com.buildkite.docker_version=1.10.0 \
+    com.buildkite.docker_compose_version=1.6.0
 
-RUN apk add --update --repository http://dl-1.alpinelinux.org/alpine/edge/community/ tini \
-     && apk add curl wget bash git perl openssh-client py-pip py-yaml docker\<1.9.2 \
-    && pip install -U pip docker-compose==1.5.1 \
+RUN apk add --update --repository http://dl-1.alpinelinux.org/alpine/edge/testing/community/ tini \
+     && apk-install curl wget bash git perl openssh-client py-pip py-yaml docker\<1.10.1 \
+    && pip install -U pip docker-compose==1.6.0 \
     && rm -rf /tmp/* /root/.cache `find / -regex '.*\.py[co]'`
 
 ENV BUILDKITE_AGENT_VERSION=${BUILDKITE_AGENT_VERSION} \
