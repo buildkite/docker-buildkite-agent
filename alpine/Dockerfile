@@ -9,7 +9,7 @@ LABEL com.buildkite.distro="alpine" \
     com.buildkite.docker_compose_version=1.6.0
 
 RUN apk add --update --repository http://dl-1.alpinelinux.org/alpine/edge/testing/community/ tini \
-     && apk-install curl wget bash git perl openssh-client py-pip py-yaml docker\<1.10.2 \
+     && apk add curl wget bash git perl openssh-client py-pip py-yaml docker\<1.10.2 \
     && pip install -U pip docker-compose==1.6.0 \
     && rm -rf /tmp/* /root/.cache `find / -regex '.*\.py[co]'`
 
