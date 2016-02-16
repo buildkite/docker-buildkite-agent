@@ -1,4 +1,4 @@
-FROM gliderlabs/alpine:edge
+FROM alpine:3.3
 MAINTAINER Tim Lucas <tim@buildkite.com>
 
 ARG BUILDKITE_AGENT_VERSION=stable
