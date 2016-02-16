@@ -28,17 +28,21 @@ echo ">> Buildkite version: "
 docker run --rm --entrypoint "buildkite-agent" "${DOCKER_IMAGE_NAME}" --version
 echo -e "\033[33;32mOk\033[0m"
 
-if [[ -n $(docker_label $DOCKER_IMAGE_NAME "com.buildkite.docker_version") ]] ; then
-  echo -e ">> Checking docker client for ${DOCKER_IMAGE_NAME}"
-  docker run --rm --entrypoint "docker" "${DOCKER_IMAGE_NAME}" --version
+docker_version=$(docker_label $DOCKER_IMAGE_NAME "com.buildkite.docker_version")
+
+if [[ -n "$docker_version" ]] ; then
+  echo -e ">> Checking docker client for ${DOCKER_IMAGE_NAME} matches ${docker_version}"
+  docker run --rm --entrypoint "docker" "${DOCKER_IMAGE_NAME}" --version | grep --color ${docker_version}
   echo -e "\033[33;32mOk\033[0m"
 else
   echo -e ">> Skipping docker checks"
 fi
 
-if [[ -n $(docker_label $DOCKER_IMAGE_NAME "com.buildkite.docker_compose_version") ]] ; then
+docker_compose_version=$(docker_label $DOCKER_IMAGE_NAME "com.buildkite.docker_compose_version")
+
+if [[ -n "$docker_compose_version" ]] ; then
   echo -e ">> Checking docker-compose client for ${DOCKER_IMAGE_NAME}"
-  docker run --rm --entrypoint "docker-compose" "${DOCKER_IMAGE_NAME}" --version
+  docker run --rm --entrypoint "docker-compose" "${DOCKER_IMAGE_NAME}" --version | grep --color ${docker_compose_version}
   echo -e "\033[33;32mOk\033[0m"
 else
   echo -e ">>Skipping docker-compose checks"
