@@ -56,6 +56,10 @@ ADD buildkite-agent.cfg /buildkite/buildkite-agent.cfg
 ENV BUILDKITE_AGENT_CONFIG=/buildkite/buildkite-agent.cfg
 ```
 
+## SSH Configuration
+
+This image includes [docker-ssh-env-config](https://github.com/buildkite/docker-ssh-env-config) to allow you to enble SSH debug output, set known hosts, and set private keys via environment variables. See [its readme](https://github.com/buildkite/docker-ssh-env-config#readme) for usage details.
+
 ## Third Party Images
 
 * [blueimp/buildkite-agent](https://github.com/blueimp/buildkite-agent) is a minimal Docker-in-Docker (dind) image based on Alpine Linux and includes docker, docker-compose, python, pip, git, bash and openssh-client. It supports running docker isolated or bind-mounting the host docker socket, and can accept private SSH keys via environment variables.
