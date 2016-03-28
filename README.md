@@ -26,6 +26,13 @@ This image is based on Ubuntu 14.04 and includes git and docker-compose. Use thi
 docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:ubuntu
 ```
 
+## Invoking Docker from within a build
+
+There are two ways of calling Docker from within a Docker build:
+
+* Expose the Docker host inside the container, usually by mounting `/var/run/docker.sock` via the Docker compose config or from your own bash script. This is supported by all the agent docker images, but has the downside that you’re basically giving root access to the build containers.
+* Use Docker-in-Docker to create a separate Docker daemon inside the container. This is supported only by the `-docker` versions of the agent docker images. This has the downside that each build has it’s own separate image cache.
+
 ## Docker-in-Docker
 
 This image is identical to the Ubuntu image, except that it has docker running inside it. This requires the `--privileged` flag.
@@ -34,7 +41,9 @@ This image is identical to the Ubuntu image, except that it has docker running i
 docker run -it --privileged -e DIND=true -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:ubuntu-docker
 ```
 
-If you simply want to use the docker client in a docker image, you can drop the `DIND` environment and the `--privileged` flag.
+If you simply want to use the docker client in a docker image, you can drop the `DIND` environment variable and the `--privileged` flag.
+
+You can specify arguments for the inner Docker daemon using the `DOCKER_DAEMON_ARGS`, for example `-e DOCKER_DAEMON_ARGS="-s overlay"`
 
 ## Adding Hooks
 
