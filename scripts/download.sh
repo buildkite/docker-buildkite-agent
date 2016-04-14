@@ -52,24 +52,15 @@ mkdir -p beta-amd64/
 tar xzvf beta-amd64.tar.gz -C beta-amd64/
 chmod +x beta-amd64/buildkite-agent
 
+rm -rf agent-master/
+download https://github.com/buildkite/agent/archive/master.zip master.zip
+unzip master.zip
+cd agent-master/
+docker build --tag agent-master .
+docker run --rm -v "$PWD:/go/src/github.com/buildkite/agent" agent-master scripts/utils/build-binary.sh "linux" "amd64" "edge"
+cd ../
+
 rm -rf edge-amd64/
 mkdir -p edge-amd64/
-download https://download.buildkite.com/builds/Linux/x86_64/buildkite-agent-edge edge-amd64/buildkite-agent
+cp agent-master/pkg/buildkite-agent-linux-amd64 edge-amd64/buildkite-agent
 chmod +x edge-amd64/buildkite-agent
-
-download "$(agent_release 386)" stable-386.tar.gz
-rm -rf stable-386/
-mkdir -p stable-386/
-tar xzvf stable-386.tar.gz -C stable-386/
-chmod +x stable-386/buildkite-agent
-
-download "$(agent_release 386 beta)" beta-386.tar.gz
-rm -rf beta-386/
-mkdir -p beta-386/
-tar xzvf beta-386.tar.gz -C beta-386/
-chmod +x beta-386/buildkite-agent
-
-rm -rf edge-386/
-mkdir -p edge-386/
-download https://download.buildkite.com/builds/Linux/386/buildkite-agent-edge edge-386/buildkite-agent
-chmod +x edge-386/buildkite-agent
