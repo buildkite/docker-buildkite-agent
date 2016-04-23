@@ -73,6 +73,8 @@ One approach is to run `ssh-agent` on the host machine and mount the ssh-agent s
 
 A less-recommended approach is to use the built-in [docker-ssh-env-config](https://github.com/buildkite/docker-ssh-env-config) which allows you to enble SSH debug output, set known hosts, and set private keys via environment variables. See [its readme](https://github.com/buildkite/docker-ssh-env-config#readme) for usage details.
 
+Another approach is to use the [environment agent hook](https://buildkite.com/docs/agent/hooks) to pull down the key into the container’s file system before the `git checkout` occurs. Note: the key will exist in Docker’s file system unless it is destroyed.
+
 ## Third Party Images
 
 * [blueimp/buildkite-agent](https://github.com/blueimp/buildkite-agent) is a minimal Docker-in-Docker (dind) image based on Alpine Linux and includes docker, docker-compose, python, pip, git, bash and openssh-client. It supports running docker isolated or bind-mounting the host docker socket, and can accept private SSH keys via environment variables.
