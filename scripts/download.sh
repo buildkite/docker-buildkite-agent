@@ -57,7 +57,7 @@ download https://github.com/buildkite/agent/archive/master.zip master.zip
 unzip master.zip
 cd agent-master/
 docker build --tag agent-master .
-docker run --rm -v "$PWD:/go/src/github.com/buildkite/agent" agent-master scripts/utils/build-binary.sh "linux" "amd64" "edge"
+docker run -u "$(id -u)" --rm -v "$PWD:/go/src/github.com/buildkite/agent" agent-master scripts/utils/build-binary.sh "linux" "amd64" "edge"
 cd ../
 
 rm -rf edge-amd64/
