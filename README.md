@@ -67,7 +67,11 @@ ENV BUILDKITE_AGENT_CONFIG=/buildkite/buildkite-agent.cfg
 
 ## SSH Configuration
 
-This image includes [docker-ssh-env-config](https://github.com/buildkite/docker-ssh-env-config) to allow you to enble SSH debug output, set known hosts, and set private keys via environment variables. See [its readme](https://github.com/buildkite/docker-ssh-env-config#readme) for usage details.
+There are many approaches to exposing secrets, such as SSH keys, into containers.
+
+One approach is to run `ssh-agent` on the host machine and mount the ssh-agent socket into the containers. See the [Buildkite Agent SSH keys documentation](https://buildkite.com/docs/agent/ssh-keys) for examples on using ssh-agent.
+
+A less-recommended approach is to use the built-in [docker-ssh-env-config](https://github.com/buildkite/docker-ssh-env-config) which allows you to enble SSH debug output, set known hosts, and set private keys via environment variables. See [its readme](https://github.com/buildkite/docker-ssh-env-config#readme) for usage details.
 
 ## Third Party Images
 
