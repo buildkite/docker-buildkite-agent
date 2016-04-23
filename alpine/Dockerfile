@@ -18,7 +18,7 @@ ENV BUILDKITE_AGENT_VERSION=${BUILDKITE_AGENT_VERSION} \
     BUILDKITE_HOOKS_PATH=/buildkite/hooks
 
 COPY ./scripts/docker/entrypoint.sh ./assets/ssh-env-config.sh /usr/local/bin/
-COPY ./assets/${BUILDKITE_AGENT_VERSION}-386 /buildkite
+COPY ./assets/${BUILDKITE_AGENT_VERSION}-amd64 /buildkite
 RUN ln -s /buildkite/buildkite-agent /usr/local/bin/buildkite-agent
 
 ENTRYPOINT ["/usr/bin/tini", "-vg", "--", "/usr/local/bin/entrypoint.sh", "buildkite-agent"]
