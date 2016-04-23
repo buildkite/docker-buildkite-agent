@@ -75,10 +75,6 @@ A less-recommended approach is to use the built-in [docker-ssh-env-config](https
 
 Another approach is to use the [environment agent hook](https://buildkite.com/docs/agent/hooks) to pull down the key into the container’s file system before the `git checkout` occurs. Note: the key will exist in Docker’s file system unless it is destroyed.
 
-## Third Party Images
-
-* [blueimp/buildkite-agent](https://github.com/blueimp/buildkite-agent) is a minimal Docker-in-Docker (dind) image based on Alpine Linux and includes docker, docker-compose, python, pip, git, bash and openssh-client. It supports running docker isolated or bind-mounting the host docker socket, and can accept private SSH keys via environment variables.
-
 ## Say hi!
 
 Come and say hi in the #docker channel in the [Buildkite Chat](https://chat.buildkite.com) slack room!
