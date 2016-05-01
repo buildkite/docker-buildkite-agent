@@ -11,6 +11,7 @@ DOCKER_VERSIONS=(
   1.8.3
   1.9.1
   1.10.1
+  1.11.0
 )
 
 DISTROS=(
