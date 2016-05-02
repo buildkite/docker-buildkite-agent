@@ -6,7 +6,6 @@ set -euo pipefail
 ## {image_name} {base_image} {distro} {buildkite_version} {docker_version} {extra tags...}
 
 DOCKER_VERSIONS=(
-  1.6.2
   1.7.1
   1.8.3
   1.9.1
