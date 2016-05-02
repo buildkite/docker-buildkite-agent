@@ -26,7 +26,6 @@ BUILDKITE_VERSIONS=(
 )
 
 LATEST_DOCKER=${DOCKER_VERSIONS[${#DOCKER_VERSIONS[@]} - 1]}
-ALPINE_DOCKER=1.9.1
 
 # Returns the major version for a given X.X.X docker version
 docker_major_version() {
@@ -42,14 +41,8 @@ image_name() {
 for distro in ${DISTROS[*]} ; do
   for version in ${BUILDKITE_VERSIONS[*]} ; do
     tags=()
-    if [[ $distro == "alpine" ]] ; then
-      tags+=($(sed -e 's/stable/latest/g' <<< $version))
-      tags+=($(printf "%s-docker-%s" $(image_name "$version" "$distro") $(docker_major_version "$ALPINE_DOCKER")))
-    fi
+    [[ $distro == "alpine" ]] && tags+=($(sed -e 's/stable/latest/g' <<< $version))
     printf "%s %s %s %s n/a ${tags[*]-}\n" $(image_name "$version" "$distro") "n/a" "$distro" "$version"
-    if [[ ! -f "$distro/Dockerfile.docker-template" ]] ; then
-     continue
-    fi
     for docker_version in ${DOCKER_VERSIONS[*]} ; do
       printf "%s-docker-%s %s %s %s %s %s-docker-%s" \
         $(image_name "$version" "$distro") $docker_version \

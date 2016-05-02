@@ -1,0 +1,19 @@
+MAINTAINER Tim Lucas <tim@buildkite.com>
+
+ARG DOCKER_VERSION
+ARG DOCKER_COMPOSE_VERSION
+
+LABEL com.buildkite.docker_version=${DOCKER_VERSION} \
+    com.buildkite.docker_dind=true \
+    com.buildkite.docker_compose_version=${DOCKER_COMPOSE_VERSION}
+
+RUN apk add --update --repository http://dl-1.alpinelinux.org/alpine/edge/community/ tini docker=${DOCKER_VERSION} \
+     && apk add curl wget bash git perl openssh-client py-pip py-yaml \
+    && pip install -U pip docker-compose==${DOCKER_COMPOSE_VERSION} \
+    && rm -rf /tmp/* /root/.cache `find / -regex '.*\.py[co]'`
+
+RUN curl -fL "https://raw.githubusercontent.com/docker/docker/v${DOCKER_VERSION}/hack/dind" -o /usr/local/bin/dind \
+    && chmod +x /usr/local/bin/dind
+
+VOLUME /var/lib/docker
+EXPOSE 2375

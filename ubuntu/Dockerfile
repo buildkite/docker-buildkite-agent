@@ -2,7 +2,6 @@ FROM krallin/ubuntu-tini:trusty
 MAINTAINER Tim Lucas <tim@buildkite.com>
 
 ARG BUILDKITE_AGENT_VERSION=stable
-ARG SSH_ENV_COMMIT_REF=bf7e6f0
 
 LABEL com.buildkite.distro="ubuntu" \
     com.buildkite.version=${BUILDKITE_AGENT_VERSION}
