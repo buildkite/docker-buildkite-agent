@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -euxo pipefail
 
 ## Builds the all the images defined by list.sh
 
@@ -28,7 +28,7 @@ version_gt() {
 docker_compose_version_from_docker() {
   local docker_version="$1"
   if version_gt $docker_version "1.9.1" ; then
-    echo "1.6.0"
+    echo "1.7.0"
   elif version_gt $docker_version "1.7.1" ; then
     echo "1.5.2"
   elif version_gt $docker_version "1.7.0" ; then
@@ -60,12 +60,20 @@ scripts/list.sh | while read line ; do
   echo -e "\n--- Building $tag"
   echo "Tag: $tag Base: $base Distro: $distro Version: $version Docker: $docker Aliases: $extratags"
 
-
   ## build base images (without docker)
   if [[ $docker == 'n/a' ]] ; then
     docker build \
       --build-arg BUILDKITE_AGENT_VERSION=$version --tag "buildkite/agent:$tag" \
       -f $distro/Dockerfile .
+
+  ## build alpine image (with docker)
+  elif [[ $distro == 'alpine' ]] ; then
+    docker build \
+      --build-arg BUILDKITE_AGENT_VERSION=$version --tag "buildkite/agent:$tag" \
+      --build-arg DOCKER_VERSION=$docker \
+      --build-arg DOCKER_COMPOSE_VERSION=$(docker_compose_version_from_docker $docker) \
+      -f $distro/Dockerfile .
+
   # build variants with docker from Dockerfile.docker-template
   else
     dockerfile_from "$distro/Dockerfile.docker-template" "buildkite/agent:$base" > dockerfile.tmp
@@ -80,7 +88,7 @@ scripts/list.sh | while read line ; do
   # add extra tags
   for tagalias in ${extratags[@]} ; do
     echo "Tagging buildkite/agent:$tag as buildkite/agent:$tagalias"
-    docker tag -f "buildkite/agent:$tag" "buildkite/agent:$tagalias"
+    docker tag "buildkite/agent:$tag" "buildkite/agent:$tagalias"
   done
 done
 

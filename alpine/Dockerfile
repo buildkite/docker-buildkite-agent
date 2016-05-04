@@ -2,15 +2,17 @@ FROM alpine:edge
 MAINTAINER Tim Lucas <tim@buildkite.com>
 
 ARG BUILDKITE_AGENT_VERSION=stable
+ARG DOCKER_VERSION
+ARG DOCKER_COMPOSE_VERSION
 
 LABEL com.buildkite.distro="alpine" \
     com.buildkite.version=${BUILDKITE_AGENT_VERSION} \
-    com.buildkite.docker_version=1.11.1 \
-    com.buildkite.docker_compose_version=1.7.0
+    com.buildkite.docker_version=${DOCKER_VERSION} \
+    com.buildkite.docker_compose_version=${DOCKER_COMPOSE_VERSION}
 
-RUN apk add --update --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ tini docker\<1.11.2 \
+RUN apk add --update --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ tini docker=${DOCKER_VERSION} \
     && apk add curl wget bash git perl openssh-client py-pip py-yaml \
-    && pip install -U pip docker-compose==1.7.0 \
+    && pip install -U pip docker-compose==${DOCKER_COMPOSE_VERSION} \
     && rm -rf /tmp/* /root/.cache `find / -regex '.*\.py[co]'`
 
 ENV BUILDKITE_AGENT_VERSION=${BUILDKITE_AGENT_VERSION} \
