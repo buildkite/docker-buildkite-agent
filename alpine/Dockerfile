@@ -5,12 +5,16 @@ ARG BUILDKITE_AGENT_VERSION=stable
 ARG DOCKER_VERSION
 ARG DOCKER_COMPOSE_VERSION
 
+# Alpine sometimes has package revisions, check
+# https://pkgs.alpinelinux.org/packages?name=docker
+ARG ALPINE_DOCKER_REVISION=r0
+
 LABEL com.buildkite.distro="alpine" \
     com.buildkite.version=${BUILDKITE_AGENT_VERSION} \
     com.buildkite.docker_version=${DOCKER_VERSION} \
     com.buildkite.docker_compose_version=${DOCKER_COMPOSE_VERSION}
 
-RUN apk add --update --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ tini docker=${DOCKER_VERSION} \
+RUN apk add --update --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ tini docker=${DOCKER_VERSION}-${ALPINE_DOCKER_REVISION} \
     && apk add curl wget bash git perl openssh-client py-pip py-yaml \
     && pip install -U pip docker-compose==${DOCKER_COMPOSE_VERSION} \
     && rm -rf /tmp/* /root/.cache `find / -regex '.*\.py[co]'`

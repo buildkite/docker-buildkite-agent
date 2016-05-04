@@ -27,9 +27,8 @@ BUILDKITE_VERSIONS=(
 
 LATEST_DOCKER=${DOCKER_VERSIONS[${#DOCKER_VERSIONS[@]} - 1]}
 
-# Alpine only has the latest version built, generally r0, check
-# https://pkgs.alpinelinux.org/packages?name=docker
-ALPINE_DOCKER=${LATEST_DOCKER}-r0
+# Alpine only has the latest version built
+ALPINE_DOCKER=${LATEST_DOCKER}
 
 # Returns the major version for a given X.X.X docker version
 docker_major_version() {
