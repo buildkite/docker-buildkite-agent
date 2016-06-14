@@ -38,6 +38,11 @@ docker_compose_version_from_docker() {
   fi
 }
 
+# Returns the major version for a given X.X.X docker version
+docker_major_version() {
+  cut -d. -f1-2 <<< $1
+}
+
 cd $(dirname $0)/../
 
 PATTERN=${1:-.+}
@@ -74,7 +79,7 @@ scripts/list.sh | while read line ; do
       --build-arg DOCKER_VERSION=$docker \
       --build-arg DOCKER_COMPOSE_VERSION=$(docker_compose_version_from_docker $docker) \
       --tag "buildkite/agent:$tag" \
-      -f $distro/Dockerfile .
+      -f "$distro/Dockerfile-$(docker_major_version $docker)" .
 
   # build variants with docker from Dockerfile.docker-template
   else
