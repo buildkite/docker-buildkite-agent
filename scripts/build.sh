@@ -63,15 +63,17 @@ scripts/list.sh | while read line ; do
   ## build base images (without docker)
   if [[ $docker == 'n/a' ]] ; then
     docker build \
-      --build-arg BUILDKITE_AGENT_VERSION=$version --tag "buildkite/agent:$tag" \
+      --build-arg BUILDKITE_AGENT_VERSION=$version \
+      --tag "buildkite/agent:$tag" \
       -f $distro/Dockerfile .
 
   ## build alpine image (with docker)
   elif [[ $distro == 'alpine' ]] ; then
     docker build \
-      --build-arg BUILDKITE_AGENT_VERSION=$version --tag "buildkite/agent:$tag" \
+      --build-arg BUILDKITE_AGENT_VERSION=$version \
       --build-arg DOCKER_VERSION=$docker \
       --build-arg DOCKER_COMPOSE_VERSION=$(docker_compose_version_from_docker $docker) \
+      --tag "buildkite/agent:$tag" \
       -f $distro/Dockerfile .
 
   # build variants with docker from Dockerfile.docker-template
