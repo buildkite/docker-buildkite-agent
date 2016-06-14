@@ -28,7 +28,7 @@ version_gt() {
 docker_compose_version_from_docker() {
   local docker_version="$1"
   if version_gt $docker_version "1.9.1" ; then
-    echo "1.7.0"
+    echo "1.7.1"
   elif version_gt $docker_version "1.7.1" ; then
     echo "1.5.2"
   elif version_gt $docker_version "1.7.0" ; then
