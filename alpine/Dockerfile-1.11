@@ -13,6 +13,10 @@ LABEL com.buildkite.distro="alpine" \
     com.buildkite.docker_version=${DOCKER_VERSION} \
     com.buildkite.docker_compose_version=${DOCKER_COMPOSE_VERSION}
 
+# Install tini and remove its backwards compatibility wrapper
+RUN apk --no-cache add tini \
+    && rm /usr/bin/tini
+
 RUN apk --no-cache add \
       docker=${DOCKER_VERSION}-${ALPINE_DOCKER_REVISION} \
       curl wget bash git perl openssh-client py-pip py-yaml \
