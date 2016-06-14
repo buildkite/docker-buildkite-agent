@@ -4,11 +4,13 @@ Docker images for the [Buildkite Agent](https://github.com/buildkite/agent). A v
 
 At present we provide a variety of images based on Ubuntu or Alpine Linux base images, then with either the stable, beta or edge version of the Buildkite Agent, with or without docker:
 
- * `latest`, `alpine`, `ubuntu`, `ubuntu-docker-1.10`
- * `beta`, `beta-alpine`, `beta-ubuntu`, `beta-ubuntu-docker-1.10`
- * `edge`, `edge-alpine`, `edge-ubuntu`, `edge-ubuntu-docker-1.10`
+ * Stable agents: `latest`, `alpine`, `ubuntu`, `alpine-docker-1.11`, `ubuntu-docker-1.11`
+ * Beta agents: `beta`, `beta-alpine`, `beta-ubuntu`, `beta-alpine-docker-1.11`, `beta-ubuntu-docker-1.11`
+ * Experimental agents: `edge`, `edge-alpine`, `edge-ubuntu`, `edge-alpine-docker-1.11`, `edge-ubuntu-docker-1.11`
 
-If in doubt, go with `buildkite/agent:latest`, it's the smallest, the most stable and includes a docker client. Older versions of the docker images are built back to 1.6.2.
+If in doubt, go with `buildkite/agent:latest`, it's the smallest, the most stable and includes a docker client.
+
+For older versions of Docker (such as `1.9`) see the [complete tag list on Docker Hub](https://hub.docker.com/r/buildkite/agent/tags).
 
 ## Basic example
 
