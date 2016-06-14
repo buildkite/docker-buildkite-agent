@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine:3.4
 MAINTAINER Tim Lucas <tim@buildkite.com>
 
 ARG BUILDKITE_AGENT_VERSION=stable
@@ -14,7 +14,7 @@ LABEL com.buildkite.distro="alpine" \
     com.buildkite.docker_version=${DOCKER_VERSION} \
     com.buildkite.docker_compose_version=${DOCKER_COMPOSE_VERSION}
 
-RUN apk add --update --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ tini docker=${DOCKER_VERSION}-${ALPINE_DOCKER_REVISION} \
+RUN apk add --update --repository http://dl-cdn.alpinelinux.org/alpine/3.4/community/ docker=${DOCKER_VERSION}-${ALPINE_DOCKER_REVISION} \
     && apk add curl wget bash git perl openssh-client py-pip py-yaml \
     && pip install -U pip docker-compose==${DOCKER_COMPOSE_VERSION} \
     && rm -rf /tmp/* /root/.cache `find / -regex '.*\.py[co]'`
@@ -27,5 +27,5 @@ COPY ./scripts/docker/entrypoint.sh ./assets/ssh-env-config.sh /usr/local/bin/
 COPY ./assets/${BUILDKITE_AGENT_VERSION}-amd64 /buildkite
 RUN ln -s /buildkite/buildkite-agent /usr/local/bin/buildkite-agent
 
-ENTRYPOINT ["/usr/bin/tini", "-vg", "--", "/usr/local/bin/entrypoint.sh", "buildkite-agent"]
+ENTRYPOINT ["tini", "-vg", "--", "/usr/local/bin/entrypoint.sh", "buildkite-agent"]
 CMD ["start"]
