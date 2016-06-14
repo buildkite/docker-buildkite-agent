@@ -27,5 +27,5 @@ COPY ./scripts/docker/entrypoint.sh ./assets/ssh-env-config.sh /usr/local/bin/
 COPY ./assets/${BUILDKITE_AGENT_VERSION}-amd64 /buildkite
 RUN ln -s /buildkite/buildkite-agent /usr/local/bin/buildkite-agent
 
-ENTRYPOINT ["tini", "-vg", "--", "/usr/local/bin/entrypoint.sh", "buildkite-agent"]
+ENTRYPOINT ["tini", "-g", "--", "/usr/local/bin/entrypoint.sh", "buildkite-agent"]
 CMD ["start"]
