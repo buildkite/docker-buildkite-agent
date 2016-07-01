@@ -28,7 +28,7 @@ version_gt() {
 docker_compose_version_from_docker() {
   local docker_version="$1"
   if version_gt $docker_version "1.9.1" ; then
-    echo "1.7.0"
+    echo "1.7.1"
   elif version_gt $docker_version "1.7.1" ; then
     echo "1.5.2"
   elif version_gt $docker_version "1.7.0" ; then
@@ -36,6 +36,11 @@ docker_compose_version_from_docker() {
   else
     echo "1.3.3"
   fi
+}
+
+# Returns the major version for a given X.X.X docker version
+docker_major_version() {
+  cut -d. -f1-2 <<< $1
 }
 
 cd $(dirname $0)/../
@@ -63,16 +68,18 @@ scripts/list.sh | while read line ; do
   ## build base images (without docker)
   if [[ $docker == 'n/a' ]] ; then
     docker build \
-      --build-arg BUILDKITE_AGENT_VERSION=$version --tag "buildkite/agent:$tag" \
+      --build-arg BUILDKITE_AGENT_VERSION=$version \
+      --tag "buildkite/agent:$tag" \
       -f $distro/Dockerfile .
 
   ## build alpine image (with docker)
   elif [[ $distro == 'alpine' ]] ; then
     docker build \
-      --build-arg BUILDKITE_AGENT_VERSION=$version --tag "buildkite/agent:$tag" \
+      --build-arg BUILDKITE_AGENT_VERSION=$version \
       --build-arg DOCKER_VERSION=$docker \
       --build-arg DOCKER_COMPOSE_VERSION=$(docker_compose_version_from_docker $docker) \
-      -f $distro/Dockerfile .
+      --tag "buildkite/agent:$tag" \
+      -f "$distro/Dockerfile-$(docker_major_version $docker)" .
 
   # build variants with docker from Dockerfile.docker-template
   else

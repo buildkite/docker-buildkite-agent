@@ -24,4 +24,17 @@ if [[ -e /buildkite/bootstrap.sh ]] ; then
   export BUILDKITE_BOOTSTRAP_SCRIPT_PATH=/buildkite/bootstrap.sh
 fi
 
+if grep Ubuntu /etc/os-release > /dev/null; then
+  cat << EOF >&2
+---
+The Ubuntu versions of the buildkite/agent images are now deprecated and only
+the Alpine version of the images are supported and updated.
+
+Please migrate to the Alpine-based image, or if you’d like to use Ubuntu
+please build your own Docker image and use the standard Buildkite Agent
+installers.
+---
+EOF
+fi
+
 exec /usr/local/bin/ssh-env-config.sh "$@"

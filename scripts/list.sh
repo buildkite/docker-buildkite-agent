@@ -5,7 +5,14 @@ set -euo pipefail
 ## Prints supported image combinations in the following format
 ## {image_name} {base_image} {distro} {buildkite_version} {docker_version} {extra tags...}
 
-DOCKER_VERSIONS=(
+ALPINE_DOCKER_VERSIONS=(
+  1.9.1
+  1.11.1
+)
+
+LATEST_ALPINE_DOCKER=${ALPINE_DOCKER_VERSIONS[${#ALPINE_DOCKER_VERSIONS[@]} - 1]}
+
+UBUNTU_DOCKER_VERSIONS=(
   1.6.2
   1.7.1
   1.8.3
@@ -13,6 +20,8 @@ DOCKER_VERSIONS=(
   1.10.3
   1.11.1
 )
+
+LATEST_UBUNTU_DOCKER=${UBUNTU_DOCKER_VERSIONS[${#UBUNTU_DOCKER_VERSIONS[@]} - 1]}
 
 DISTROS=(
   alpine
@@ -25,11 +34,6 @@ BUILDKITE_VERSIONS=(
   edge
 )
 
-LATEST_DOCKER=${DOCKER_VERSIONS[${#DOCKER_VERSIONS[@]} - 1]}
-
-# Alpine only has the latest version built
-ALPINE_DOCKER=${LATEST_DOCKER}
-
 # Returns the major version for a given X.X.X docker version
 docker_major_version() {
   cut -d. -f1-2 <<< $1
@@ -41,31 +45,45 @@ image_name() {
   printf "%s-%s" "$release" "$distro" | sed -e 's/^stable-//g'
 }
 
-for distro in ${DISTROS[*]} ; do
-  for version in ${BUILDKITE_VERSIONS[*]} ; do
-    tags=()
-    docker="n/a"
-    if [[ $distro == "alpine" ]] ; then
-      docker=$ALPINE_DOCKER
-      tags+=($(sed -e 's/stable/latest/g' <<< $version))
-      tags+=($(printf "%s-docker-%s" $(image_name "$version" "$distro") $(docker_major_version "$ALPINE_DOCKER")))
-    fi
-    printf "%s %s %s %s %s ${tags[*]-}\n" $(image_name "$version" "$distro") "n/a" "$distro" "$version" "$docker"
-    if [[ ! -f "$distro/Dockerfile.docker-template" ]] ; then
-     continue
-    fi
-    for docker_version in ${DOCKER_VERSIONS[*]} ; do
-      printf "%s-docker-%s %s %s %s %s %s-docker-%s" \
-        $(image_name "$version" "$distro") $docker_version \
-        $(image_name "$version" "$distro") \
-        $distro $version $docker_version \
-        $(image_name "$version" "$distro") $(docker_major_version $docker_version)
+for version in ${BUILDKITE_VERSIONS[*]} ; do
+  distro="alpine"
+  docker="n/a"
+  for docker_version in ${ALPINE_DOCKER_VERSIONS[*]} ; do
+    printf "%s-docker-%s %s %s %s %s %s-docker-%s" \
+      $(image_name "$version" "$distro") $docker_version \
+      "n/a" \
+      $distro $version $docker_version \
+      $(image_name "$version" "$distro") $(docker_major_version $docker_version)
 
-      if [[ $docker_version == $LATEST_DOCKER ]] ; then
-        printf " %s-docker" $(image_name "$version" "$distro")
-      fi
+    if [[ $docker_version == $LATEST_ALPINE_DOCKER ]] ; then
+      # We also want to give the alpine distro the official
+      # buildkite/agent:[latest,edge,beta] tags
+      printf " %s" $(sed -e 's/stable/latest/g' <<< $version)
 
-      echo #newline
-    done
+      printf " %s" $(image_name "$version" "$distro")
+
+      printf " %s-docker" $(image_name "$version" "$distro")
+    fi
+
+    echo #newline
+  done
+done
+
+for version in ${BUILDKITE_VERSIONS[*]} ; do
+  distro="ubuntu"
+  docker="n/a"
+  printf "%s %s %s %s %s\n" $(image_name "$version" "$distro") "n/a" "$distro" "$version" "$docker"
+  for docker_version in ${UBUNTU_DOCKER_VERSIONS[*]} ; do
+    printf "%s-docker-%s %s %s %s %s %s-docker-%s" \
+      $(image_name "$version" "$distro") $docker_version \
+      $(image_name "$version" "$distro") \
+      $distro $version $docker_version \
+      $(image_name "$version" "$distro") $(docker_major_version $docker_version)
+
+    if [[ $docker_version == $LATEST_UBUNTU_DOCKER ]] ; then
+      printf " %s-docker" $(image_name "$version" "$distro")
+    fi
+
+    echo #newline
   done
 done
