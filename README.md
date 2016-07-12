@@ -35,7 +35,7 @@ docker run -it \
   buildkite/agent
 ```
 
-It is also possible, but not recommended, to use Docker-in-Docker by setting the `DIND` environment variable and the `--previliged` flag. You can also specify arguments for the inner Docker daemon using `DOCKER_DAEMON_ARGS`.
+It is also possible, but not recommended, to use Docker-in-Docker by setting the `DIND` environment variable and the `--privileged` flag. You can also specify arguments for the inner Docker daemon using `DOCKER_DAEMON_ARGS`.
 
 ```bash
 docker run -it \
