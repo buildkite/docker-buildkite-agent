@@ -2,13 +2,15 @@
 
 Docker images for the [Buildkite Agent](https://github.com/buildkite/agent). A variety of builds are provided, based on the version of Buildkite, the base operating system and whether docker and docker-compose is installed on the image.
 
-At present we provide a variety of images based on Ubuntu or Alpine Linux base images, then with either the stable, beta or edge version of the Buildkite Agent, with or without docker:
+> If you don't need to run the agent on a purely Docker-based operating system (such as Kubernetes), and instead just want to [run your builds inside Docker containers](https://buildkite.com/docs/guides/docker-containerized-builds), then we recommend using one of the standard installers (such as `apt`). See the [containerized builds guide](https://buildkite.com/docs/guides/docker-containerized-builds) for more information.
 
- * Stable agents: `latest`, `alpine`, `ubuntu`, `alpine-docker-1.11`, `ubuntu-docker-1.11`
- * Beta agents: `beta`, `beta-alpine`, `beta-ubuntu`, `beta-alpine-docker-1.11`, `beta-ubuntu-docker-1.11`
- * Experimental agents: `edge`, `edge-alpine`, `edge-ubuntu`, `edge-alpine-docker-1.11`, `edge-ubuntu-docker-1.11`
+The Buildkite Agent is available via an Alpine Linux based image, with either the stable, beta or experimental versions of the Buildkite Agent, with or without docker:
 
-If in doubt, go with `buildkite/agent:latest`, it's the smallest, the most stable and includes a docker client.
+ * Stable agents: `latest`, `alpine`, `alpine-docker-1.11`
+ * Beta agents: `beta`, `beta-alpine`, `beta-alpine-docker-1.11`
+ * Experimental agents: `edge`, `edge-alpine`, `edge-alpine-docker-1.11`
+
+If in doubt, go with `buildkite/agent`—it's the smallest, most stable, and includes the docker client.
 
 For older versions of Docker (such as `1.9`) see the [complete tag list on Docker Hub](https://hub.docker.com/r/buildkite/agent/tags).
 
@@ -17,35 +19,32 @@ For older versions of Docker (such as `1.9`) see the [complete tag list on Docke
 For most simple cases, we recommend our minimal Alpine Linux based build. It has a minimal footprint and the latest docker client installed.
 
 ```bash
-docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent
-```
-
-## Ubuntu
-
-This image is based on Ubuntu 14.04 and includes git and docker-compose. Use this if you need a full Ubuntu environment.
-
-```bash
-docker run -it -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:ubuntu
+docker run -it \
+  -e BUILDKITE_AGENT_TOKEN=xxx \
+  buildkite/agent
 ```
 
 ## Invoking Docker from within a build
 
-There are two ways of calling Docker from within a Docker build:
-
-* Expose the Docker host inside the container, usually by mounting `/var/run/docker.sock` via the Docker compose config or from your own bash script. This is supported by all the agent docker images, but has the downside that you’re basically giving root access to the build containers.
-* Use Docker-in-Docker to create a separate Docker daemon inside the container. This is supported only by the `-docker` versions of the agent docker images. This has the downside that each build has it’s own separate image cache.
-
-## Docker-in-Docker
-
-This image is identical to the Ubuntu image, except that it has docker running inside it. This requires the `--privileged` flag.
+To invoke Docker from within builds you'll need to mount the Docker socket into the container:
 
 ```bash
-docker run -it --privileged -e DIND=true -e BUILDKITE_AGENT_TOKEN=xxx buildkite/agent:ubuntu-docker
+docker run -it \
+  -e BUILDKITE_AGENT_TOKEN=xxx \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  buildkite/agent
 ```
 
-If you simply want to use the docker client in a docker image, you can drop the `DIND` environment variable and the `--privileged` flag.
+It is also possible, but not recommended, to use Docker-in-Docker by setting the `DIND` environment variable and the `--previliged` flag. You can also specify arguments for the inner Docker daemon using `DOCKER_DAEMON_ARGS`.
 
-You can specify arguments for the inner Docker daemon using the `DOCKER_DAEMON_ARGS`, for example `-e DOCKER_DAEMON_ARGS="-s overlay"`
+```bash
+docker run -it \
+  -e BUILDKITE_AGENT_TOKEN=xxx \
+  --privileged \
+  -e DIND=true \
+  -e DOCKER_DAEMON_ARGS="-s overlay" \
+  buildkite/agent
+```
 
 ## Adding Hooks
 
