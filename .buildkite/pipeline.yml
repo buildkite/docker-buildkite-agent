@@ -1,24 +1,11 @@
 steps:
-  - command: scripts/download.sh
-    name: "Download :buildkite: assets"
-    agents:
-      queue: docker-builder
+  - wait
+
+  - command: .buildkite/steps/test.sh
+    name: ":hammer: Test"
 
   - wait
-  - command: scripts/build.sh
-    name: "Build :docker: images"
-    agents:
-      queue: docker-builder
 
-  - wait
-  - command: scripts/test_all_images.sh
-    name: "Test :allthethings:"
-    agents:
-      queue: docker-builder
-
-  - wait
-  - command: scripts/release.sh
-    name: "Push images to DockerHub :rocket:"
+  - command: .buildkite/steps/release.sh
+    name: ":rocket: Push to DockerHub"
     branches: master
-    agents:
-      queue: docker-builder
