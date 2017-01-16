@@ -1,11 +1,8 @@
 steps:
-  - command: scripts/download.sh
-    name: "Download :buildkite: assets"
-    agents:
-      queue: docker-builder
-
   - wait
-  - command: scripts/build.sh
+  - commands:
+      - scripts/download.sh
+      - scripts/build.sh
     name: "Build :docker: images"
     agents:
       queue: docker-builder
