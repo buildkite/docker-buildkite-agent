@@ -19,7 +19,7 @@ RUN apk --no-cache add tini \
 
 RUN apk --no-cache add \
       docker=${DOCKER_VERSION}-${ALPINE_DOCKER_REVISION} \
-      curl wget bash git perl openssh-client py-pip py-yaml \
+      curl wget bash git perl openssh-client py2-pip py2-yaml \
     && pip install -U pip docker-compose==${DOCKER_COMPOSE_VERSION} \
     && rm -rf /tmp/* /root/.cache `find / -regex '.*\.py[co]'`
 
