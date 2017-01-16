@@ -7,7 +7,7 @@ set -euo pipefail
 
 ALPINE_DOCKER_VERSIONS=(
   1.9.1
-  1.11.1
+  1.11.2
   1.12.1
 )
 
