@@ -6,7 +6,7 @@ ARG DOCKER_VERSION
 ARG DOCKER_COMPOSE_VERSION
 
 # See https://pkgs.alpinelinux.org/packages?name=docker
-ARG ALPINE_DOCKER_REVISION=r0
+ARG ALPINE_DOCKER_REVISION=r1
 
 LABEL com.buildkite.distro="alpine" \
     com.buildkite.version=${BUILDKITE_AGENT_VERSION} \
