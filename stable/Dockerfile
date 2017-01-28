@@ -10,7 +10,7 @@ RUN apk add --no-cache \
     docker=1.13.0-r0 \
     su-exec
 
-ENV BUILDKITE_AGENT_VERSION=2.1.17 \
+ENV BUILDKITE_AGENT_VERSION=2.3.2 \
     BUILDKITE_BUILD_PATH=/buildkite/builds \
     BUILDKITE_HOOKS_PATH=/buildkite/hooks \
     BUILDKITE_BOOTSTRAP_SCRIPT_PATH=/buildkite/bootstrap.sh
