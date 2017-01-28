@@ -9,6 +9,7 @@ RUN apk add --no-cache \
     curl \
     docker \
     docker-compose \
+    jq \
     su-exec
 
 ENV BUILDKITE_AGENT_VERSION=2.3.2 \
