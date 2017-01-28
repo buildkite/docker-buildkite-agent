@@ -7,6 +7,6 @@ for tag in ${tags[*]} ; do
   echo "--- :docker: Building buildkite-agent:${tag}"
   docker build --tag "buildkite-agent:${tag}" -f "${tag}/Dockerfile" .
 
-  echo "--- :hammer: Testing buildkite-agent:${tag} runs"
+  echo "--- :hammer: Testing buildkite-agent:${tag}"
   docker run --rm --entrypoint "buildkite-agent" "buildkite-agent:${tag}" --version
 done
