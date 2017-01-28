@@ -11,5 +11,5 @@ for tag in ${tags[*]} ; do
   docker run --rm --entrypoint "buildkite-agent" "buildkite-agent:${tag}" --version
 
   echo "--- :hammer: Testing buildkite-agent:${tag} can access docker socket"
-  docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --entrypoint "docker" "buildkite-agent:${tag}" info
+  docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --entrypoint "docker" "buildkite-agent:${tag}" version
 done
