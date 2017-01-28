@@ -7,7 +7,8 @@ RUN apk add --no-cache \
     perl \
     openssh-client \
     curl \
-    docker=1.13.0-r0 \
+    docker \
+    docker-compose \
     su-exec
 
 ENV BUILDKITE_AGENT_VERSION=2.3.2 \
