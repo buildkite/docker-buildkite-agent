@@ -18,8 +18,8 @@ for tag in latest 2.3.2 2.3 2 ; do
   docker push "buildkite-agent:$tag"
 done
 
-# variants of beta 3.0-beta.9
-for tag in 3.0-beta.9 3.0 3 ; do
+# variants of beta 3.0-beta.16
+for tag in 3.0-beta.16 3.0 3 ; do
   docker tag buildkite-agent:beta "buildkite-agent:$tag"
   docker push "buildkite-agent:$tag"
 done

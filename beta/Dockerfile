@@ -11,7 +11,7 @@ RUN apk add --no-cache \
     jq \
     su-exec
 
-ENV BUILDKITE_AGENT_VERSION=3.0-beta.9 \
+ENV BUILDKITE_AGENT_VERSION=3.0-beta.16 \
     BUILDKITE_BUILD_PATH=/buildkite/builds \
     BUILDKITE_HOOKS_PATH=/buildkite/hooks \
     BUILDKITE_PLUGINS_PATH=/buildkite/plugins
