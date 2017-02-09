@@ -26,7 +26,7 @@ RUN curl -Lfs -o /usr/local/bin/buildkite-agent https://download.buildkite.com/a
 RUN curl -Lfs -o /buildkite/bootstrap.sh https://raw.githubusercontent.com/buildkite/agent/v${BUILDKITE_AGENT_VERSION}/templates/bootstrap.sh \
     && chmod +x /buildkite/bootstrap.sh
 
-RUN curl -Lfs -o /usr/local/bin/docker-compose https://github.com/docker/compose/releases/download/1.10.0/run.sh \
-    && chmod +x /usr/local/bin/docker-compose
+COPY ./compose.sh /usr/local/bin/docker-compose
 
+VOLUME /buildkite
 ENTRYPOINT ["/sbin/tini", "-g", "--", "ssh-env-config.sh", "buildkite-agent"]

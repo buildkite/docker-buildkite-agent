@@ -1,0 +1,19 @@
+version: '2.1'
+
+services:
+  agent:
+    image: "${IMAGE:-buildkite/agent:latest}"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - buildkite-data:/buildkite
+    environment:
+      - BUILDKITE_AGENT_TOKEN
+      - BUILDKITE_AGENT_META_DATA
+      - BUILDKITE_VOLUME=buildkite-data
+    command: >
+      start
+
+volumes:
+  buildkite-data:
+    external:
+      name: buildkite-data
