@@ -30,3 +30,4 @@ COPY ./compose.sh /usr/local/bin/docker-compose
 
 VOLUME /buildkite
 ENTRYPOINT ["/sbin/tini", "-g", "--", "ssh-env-config.sh", "buildkite-agent"]
+CMD ["start"]

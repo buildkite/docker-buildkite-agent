@@ -65,6 +65,26 @@ A less-recommended approach is to use the built-in [docker-ssh-env-config](https
 
 Another approach is to use the [environment agent hook](https://buildkite.com/docs/agent/hooks) to pull down the key into the container’s file system before the `git checkout` occurs. Note: the key will exist in Docker’s file system unless it is destroyed.
 
+## Advanced: docker-compose
+
+There is a wrapper script in the container that invokes a container for docker-compose. This is done to keep the image small, as docker-compose requires a python environment.
+
+Using it requires that you mount a volume into the container for `/buildkite`, and pass in the name of that volume as an env called ``.
+
+```bash
+docker volume create buildkite-data
+docker run -it \
+  -e BUILDKITE_AGENT_TOKEN=xxx \
+  -e BUILDKITE_VOLUME=buildkite-data \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v buildkite-data:/buildkite \
+  buildkite/agent
+```
+
+This passes in a volume that can then be attached to the docker-compose container, so that docker-compose can access the checked out builds.
+
+You can choose your docker-compose version by passing in `COMPOSE_VERSION` as an added bonus.
+
 ## Say hi!
 
 Come and say hi in the #docker channel in the [Buildkite Chat](https://chat.buildkite.com) slack room!

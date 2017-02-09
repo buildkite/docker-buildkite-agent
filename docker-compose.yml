@@ -10,8 +10,6 @@ services:
       - BUILDKITE_AGENT_TOKEN
       - BUILDKITE_AGENT_META_DATA
       - BUILDKITE_VOLUME=buildkite-data
-    command: >
-      start
 
 volumes:
   buildkite-data:
