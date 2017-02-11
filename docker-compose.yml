@@ -12,6 +12,4 @@ services:
       - BUILDKITE_VOLUME=buildkite-data
 
 volumes:
-  buildkite-data:
-    external:
-      name: buildkite-data
+  buildkite-builds:

@@ -9,12 +9,15 @@ RUN apk add --no-cache \
     curl \
     docker \
     jq \
-    su-exec
+    su-exec \
+    py-pip
 
 ENV BUILDKITE_AGENT_VERSION=2.3.2 \
     BUILDKITE_BUILD_PATH=/buildkite/builds \
     BUILDKITE_HOOKS_PATH=/buildkite/hooks \
     BUILDKITE_BOOTSTRAP_SCRIPT_PATH=/buildkite/bootstrap.sh
+
+RUN pip install docker-compose
 
 RUN curl -Lfs -o /usr/local/bin/buildkite-agent https://download.buildkite.com/agent/stable/${BUILDKITE_AGENT_VERSION}/buildkite-agent-linux-amd64 \
     && chmod +x /usr/local/bin/buildkite-agent \
@@ -25,8 +28,6 @@ RUN curl -Lfs -o /usr/local/bin/buildkite-agent https://download.buildkite.com/a
 # In 3.0 this is built into the buildkite-agent binary
 RUN curl -Lfs -o /buildkite/bootstrap.sh https://raw.githubusercontent.com/buildkite/agent/v${BUILDKITE_AGENT_VERSION}/templates/bootstrap.sh \
     && chmod +x /buildkite/bootstrap.sh
-
-COPY ./compose.sh /usr/local/bin/docker-compose
 
 VOLUME /buildkite
 ENTRYPOINT ["/sbin/tini", "-g", "--", "ssh-env-config.sh", "buildkite-agent"]
