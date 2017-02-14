@@ -29,6 +29,8 @@ RUN curl -Lfs -o /usr/local/bin/buildkite-agent https://download.buildkite.com/a
 RUN curl -Lfs -o /buildkite/bootstrap.sh https://raw.githubusercontent.com/buildkite/agent/v${BUILDKITE_AGENT_VERSION}/templates/bootstrap.sh \
     && chmod +x /buildkite/bootstrap.sh
 
+COPY ./entrypoint.sh /usr/local/bin/buildkite-agent-entrypoint
+
 VOLUME /buildkite
-ENTRYPOINT ["/sbin/tini", "-g", "--", "ssh-env-config.sh", "buildkite-agent"]
+ENTRYPOINT ["buildkite-agent-entrypoint"]
 CMD ["start"]
