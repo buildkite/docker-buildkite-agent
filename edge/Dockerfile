@@ -10,7 +10,8 @@ RUN apk add --no-cache \
     docker \
     jq \
     su-exec \
-    py-pip
+    py-pip \
+    run-parts
 
 ENV BUILDKITE_BUILD_PATH=/buildkite/builds \
     BUILDKITE_HOOKS_PATH=/buildkite/hooks \

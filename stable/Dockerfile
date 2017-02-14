@@ -10,7 +10,8 @@ RUN apk add --no-cache \
     docker \
     jq \
     su-exec \
-    py-pip
+    py-pip \
+    run-parts
 
 ENV BUILDKITE_AGENT_VERSION=2.3.2 \
     BUILDKITE_BUILD_PATH=/buildkite/builds \
