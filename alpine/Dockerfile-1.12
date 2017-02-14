@@ -15,7 +15,7 @@ LABEL com.buildkite.distro="alpine" \
 
 # Install tini and remove its backwards compatibility wrapper
 RUN apk --no-cache add tini \
-    && rm /usr/bin/tini
+    && rm -f /usr/bin/tini
 
 RUN apk --no-cache add \
       docker=${DOCKER_VERSION}-${ALPINE_DOCKER_REVISION} \
