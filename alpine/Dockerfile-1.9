@@ -17,7 +17,7 @@ LABEL com.buildkite.distro="alpine" \
 RUN apk --no-cache add \
       --repository http://dl-cdn.alpinelinux.org/alpine/v3.4/community/ \
       tini \
-    && rm /usr/bin/tini
+    && rm -f /usr/bin/tini
 
 RUN apk --no-cache add \
       docker=${DOCKER_VERSION}-${ALPINE_DOCKER_REVISION} \
