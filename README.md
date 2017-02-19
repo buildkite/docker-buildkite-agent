@@ -12,7 +12,7 @@ The Buildkite Agent is built on Alpine Linux, with either the stable, beta or ex
 
 If in doubt, go with `buildkite/agent:latest`—it's the most stable, and includes the docker client.
 
-Also included in the image: `docker 1.13 (client)`, `tini`, `su-exec` and `jq`.
+Also included in the image: `docker 1.13 (client)`, `docker-compose 1.10.0`, `tini`, `su-exec` and `jq`.
 
 ## Basic example
 
@@ -64,26 +64,6 @@ One approach is to run `ssh-agent` on the host machine and mount the ssh-agent s
 A less-recommended approach is to use the built-in [docker-ssh-env-config](https://github.com/buildkite/docker-ssh-env-config) which allows you to enble SSH debug output, set known hosts, and set private keys via environment variables. See [its readme](https://github.com/buildkite/docker-ssh-env-config#readme) for usage details.
 
 Another approach is to use the [environment agent hook](https://buildkite.com/docs/agent/hooks) to pull down the key into the container’s file system before the `git checkout` occurs. Note: the key will exist in Docker’s file system unless it is destroyed.
-
-## Advanced: docker-compose
-
-There is a wrapper script in the container that invokes a container for docker-compose. This is done to keep the image small, as docker-compose requires a python environment.
-
-Using it requires that you mount a volume into the container for `/buildkite`, and pass in the name of that volume as an env called ``.
-
-```bash
-docker volume create buildkite-data
-docker run -it \
-  -e BUILDKITE_AGENT_TOKEN=xxx \
-  -e BUILDKITE_VOLUME=buildkite-data \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -v buildkite-data:/buildkite \
-  buildkite/agent
-```
-
-This passes in a volume that can then be attached to the docker-compose container, so that docker-compose can access the checked out builds.
-
-You can choose your docker-compose version by passing in `COMPOSE_VERSION` as an added bonus.
 
 ## Say hi!
 
