@@ -65,6 +65,10 @@ A less-recommended approach is to use the built-in [docker-ssh-env-config](https
 
 Another approach is to use the [environment agent hook](https://buildkite.com/docs/agent/hooks) to pull down the key into the container’s file system before the `git checkout` occurs. Note: the key will exist in Docker’s file system unless it is destroyed.
 
+## Customizing the image on boot
+
+The default entrypoint will look for any scripts in `/docker-entrypoint.d/` and run them. This allows for bootstrap scripts to be mounted into the agent to install things (via apk or pip) before the agent starts.
+
 ## Say hi!
 
 Come and say hi in the #docker channel in the [Buildkite Chat](https://chat.buildkite.com) slack room!
