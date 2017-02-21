@@ -4,13 +4,13 @@ Docker images for the [Buildkite Agent](https://github.com/buildkite/agent). A v
 
 > If you don't need to run the agent on a purely Docker-based operating system (such as Kubernetes), and instead just want to [run your builds inside Docker containers](https://buildkite.com/docs/guides/docker-containerized-builds), then we recommend using one of the standard installers (such as `apt`). See the [containerized builds guide](https://buildkite.com/docs/guides/docker-containerized-builds) for more information.
 
-The Buildkite Agent is built on Alpine Linux, with either the stable, beta or experimental versions of the Buildkite Agent, with or without docker:
+The Buildkite Agent is built on Alpine Linux, with either the stable, beta or experimental versions of the Buildkite Agent:
 
  * Stable agents: `latest`, `stable`, `2`, `2.3`, `2.3.2`
  * Beta agents: `beta`, `3`, `3.0`, `3.0-beta.16`
  * Latest master agents: `edge`
 
-If in doubt, go with `buildkite/agent:latest`—it's the most stable, and includes the docker client.
+If in doubt, go with `buildkite/agent` — it's the most stable, and includes the docker client.
 
 Also included in the image: `docker 1.13 (client)`, `docker-compose 1.10.0`, `tini`, `su-exec` and `jq`.
 
@@ -65,9 +65,9 @@ A less-recommended approach is to use the built-in [docker-ssh-env-config](https
 
 Another approach is to use the [environment agent hook](https://buildkite.com/docs/agent/hooks) to pull down the key into the container’s file system before the `git checkout` occurs. Note: the key will exist in Docker’s file system unless it is destroyed.
 
-## Customizing the image on boot
+## Entrypoint customizations
 
-The default entrypoint will look for any scripts in `/docker-entrypoint.d/` and run them. This allows for bootstrap scripts to be mounted into the agent to install things (via apk or pip) before the agent starts.
+The entrypoint uses `tini` to correctly pass signals to, and kill, sub-processes. Instead of redefining `ENTRYPOINT` we recommend you copy executable scripts into `/docker-entrypoint.d/`. All executable scripts in that directory will be executed in alphanumeric order.
 
 ## Say hi!
 
