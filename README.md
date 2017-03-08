@@ -4,19 +4,17 @@ Docker images for the [Buildkite Agent](https://github.com/buildkite/agent). A v
 
 > If you don't need to run the agent on a purely Docker-based operating system (such as Kubernetes), and instead just want to [run your builds inside Docker containers](https://buildkite.com/docs/guides/docker-containerized-builds), then we recommend using one of the standard installers (such as `apt`). See the [containerized builds guide](https://buildkite.com/docs/guides/docker-containerized-builds) for more information.
 
-The Buildkite Agent is available via an Alpine Linux based image, with either the stable, beta or experimental versions of the Buildkite Agent, with or without docker:
+The Buildkite Agent is built on Alpine Linux, with either the stable, beta or experimental versions of the Buildkite Agent:
 
- * Stable agents: `latest`, `alpine`, `alpine-docker-1.11`
- * Beta agents: `beta`, `beta-alpine`, `beta-alpine-docker-1.11`
- * Experimental agents: `edge`, `edge-alpine`, `edge-alpine-docker-1.11`
+ * Stable agents: `latest`, `stable`, `2`, `2.3`, `2.3.2`
+ * Beta agents: `beta`, `3`, `3.0`, `3.0-beta.16`
+ * Latest master agents: `edge`
 
-If in doubt, go with `buildkite/agent`—it's the smallest, most stable, and includes the docker client.
+If in doubt, go with `buildkite/agent` — it's the most stable, and includes the docker client.
 
-For older versions of Docker (such as `1.9`) see the [complete tag list on Docker Hub](https://hub.docker.com/r/buildkite/agent/tags).
+Also included in the image: `docker 1.13 (client)`, `docker-compose 1.10.0`, `tini`, `su-exec` and `jq`.
 
 ## Basic example
-
-For most simple cases, we recommend our minimal Alpine Linux based build. It has a minimal footprint and the latest docker client installed.
 
 ```bash
 docker run -it \
@@ -35,16 +33,7 @@ docker run -it \
   buildkite/agent
 ```
 
-It is also possible, but not recommended, to use Docker-in-Docker by setting the `DIND` environment variable and the `--privileged` flag. You can also specify arguments for the inner Docker daemon using `DOCKER_DAEMON_ARGS`.
-
-```bash
-docker run -it \
-  -e BUILDKITE_AGENT_TOKEN=xxx \
-  --privileged \
-  -e DIND=true \
-  -e DOCKER_DAEMON_ARGS="-s overlay" \
-  buildkite/agent
-```
+Note that this gives builds the same access to the host system as docker has, which is generally root. 
 
 ## Adding Hooks
 
@@ -75,6 +64,10 @@ One approach is to run `ssh-agent` on the host machine and mount the ssh-agent s
 A less-recommended approach is to use the built-in [docker-ssh-env-config](https://github.com/buildkite/docker-ssh-env-config) which allows you to enble SSH debug output, set known hosts, and set private keys via environment variables. See [its readme](https://github.com/buildkite/docker-ssh-env-config#readme) for usage details.
 
 Another approach is to use the [environment agent hook](https://buildkite.com/docs/agent/hooks) to pull down the key into the container’s file system before the `git checkout` occurs. Note: the key will exist in Docker’s file system unless it is destroyed.
+
+## Entrypoint customizations
+
+The entrypoint uses `tini` to correctly pass signals to, and kill, sub-processes. Instead of redefining `ENTRYPOINT` we recommend you copy executable scripts into `/docker-entrypoint.d/`. All executable scripts in that directory will be executed in alphanumeric order.
 
 ## Say hi!
 
