@@ -2,7 +2,7 @@
 
 [![Build status](https://badge.buildkite.com/5ab4d67e882c6ab2cf988790ec23f13c1913ebb9aaee2502d2.svg)](https://buildkite.com/buildkite/docker-buildkite-agent)
 
-Docker images for the [Buildkite Agent](https://github.com/buildkite/agent). A variety of builds are provided, based on the version of Buildkite, the base operating system and whether docker and docker-compose is installed on the image.
+Docker images for the [Buildkite Agent](https://github.com/buildkite/agent). 
 
 > If you don't need to run the agent on a purely Docker-based operating system (such as Kubernetes), and instead just want to [run your builds inside Docker containers](https://buildkite.com/docs/guides/docker-containerized-builds), then we recommend using one of the standard installers (such as `apt`). See the [containerized builds guide](https://buildkite.com/docs/guides/docker-containerized-builds) for more information.
 
@@ -14,7 +14,7 @@ The Buildkite Agent is built on Alpine Linux, with either the stable, beta or ex
 
 If in doubt, go with `buildkite/agent` — it's the most stable, and includes the docker client. Minor versions are also tagged, e.g `3.0-beta.16` if you want to make sure nothing changes. 
 
-Also included in the image: `docker 1.13 (client)`, `docker-compose 1.10.0`, `tini`, `su-exec` and `jq`.
+Also included in the image are `docker 1.13 (client)`, `docker-compose 1.10.0`, `tini`, `su-exec` and `jq`.
 
 ## Basic example
 
