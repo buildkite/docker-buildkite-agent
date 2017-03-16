@@ -5,6 +5,7 @@ RUN apk add --no-cache \
     bash \
     git \
     perl \
+    rsync \
     openssh-client \
     curl \
     docker \
