@@ -13,7 +13,7 @@ RUN apk add --no-cache \
     py-pip \
     run-parts
 
-ENV BUILDKITE_AGENT_VERSION=2.3.2 \
+ENV BUILDKITE_AGENT_VERSION=2.4 \
     BUILDKITE_BUILD_PATH=/buildkite/builds \
     BUILDKITE_HOOKS_PATH=/buildkite/hooks \
     BUILDKITE_BOOTSTRAP_SCRIPT_PATH=/buildkite/bootstrap.sh
