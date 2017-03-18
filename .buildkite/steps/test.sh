@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-: ${DOCKER_IMAGE:=buildkite/agent}
+: ${DOCKER_IMAGE:=bandsintown/buildkite-agent}
 
 tags=(beta edge stable)
 

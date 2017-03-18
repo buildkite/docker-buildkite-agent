@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-: ${DOCKER_IMAGE:=buildkite/agent}
+: ${DOCKER_IMAGE:=bandsintown/buildkite-agent}
 : ${DOCKER_PUSH:=1}
 
 # parse a docker version like "buildkite-agent version 2.3.2, build 1408"
