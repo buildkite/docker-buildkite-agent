@@ -19,9 +19,28 @@ Also included in the image are `docker 1.13 (client)`, `docker-compose 1.10.0`, 
 ## Basic example
 
 ```bash
-docker run -it \
-  -e BUILDKITE_AGENT_TOKEN=xxx \
-  buildkite/agent
+docker run -it buildkite/agent start
+```
+
+## Securely configuring your agent
+
+Environment variables and command line arguments are insecure. The recommended way to set your agent token is to mount a data volume containing a [Buildkite Agent configuration file](https://buildkite.com/docs/agent/configuration).
+
+Here's an example showing how to create a `buildkite-config` container that you can use with the `--volumes-from` to securely get your agent token (and any other secrets you require) into the container:
+
+```shell
+$ docker create --name buildkite-config -v /buildkite/config bash
+2ddff324267a8e322678870779580805185add70ca9634092bbafd3b4423c879
+$ docker run -it --rm --volumes-from buildkite-config bash
+bash-4.4# echo 'token=xxx' >> /buildkite/config/buildkite-agent.cfg
+bash-4.4# echo 'name=agent-%n' >> /buildkite/config/buildkite-agent.cfg
+bash-4.4# echo 'meta-data=somekey=someval' >> /buildkite/config/buildkite-agent.cfg
+bash-4.4# exit
+exit
+$ docker run -d --name=buildkite-agent-1 --volumes-from buildkite-config buildkite/agent start --config /buildkite/config/buildkite-agent.cfg
+7da6569ff14cc177a01421040fdd296e9f6926a8eff8ec2e8f31964218dfbc3d
+$ docker run -d --name=buildkite-agent-2 --volumes-from buildkite-config buildkite/agent start --config /buildkite/config/buildkite-agent.cfg
+c830dd341044d30f2e4488e6d28b2c3bd2c2f0030907ea3b12b4e33523587845
 ```
 
 ## Invoking Docker from within a build
@@ -30,7 +49,6 @@ To invoke Docker from within builds you'll need to mount the Docker socket into 
 
 ```bash
 docker run -it \
-  -e BUILDKITE_AGENT_TOKEN=xxx \
   -v /var/run/docker.sock:/var/run/docker.sock \
   buildkite/agent
 ```
@@ -62,6 +80,8 @@ ENV BUILDKITE_AGENT_CONFIG=/buildkite/buildkite-agent.cfg
 There are many approaches to exposing secrets, such as SSH keys, into containers.
 
 One approach is to run `ssh-agent` on the host machine and mount the ssh-agent socket into the containers. See the [Buildkite Agent SSH keys documentation](https://buildkite.com/docs/agent/ssh-keys) for examples on using ssh-agent.
+
+Another approach is to use a [Docker data volume](https://docs.docker.com/engine/tutorials/dockervolumes/) to store the secrets, and mount it into the container using `--volumes-from`.
 
 A less-recommended approach is to use the built-in [docker-ssh-env-config](https://github.com/buildkite/docker-ssh-env-config) which allows you to enble SSH debug output, set known hosts, and set private keys via environment variables. See [its readme](https://github.com/buildkite/docker-ssh-env-config#readme) for usage details.
 
