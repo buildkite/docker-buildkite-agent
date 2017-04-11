@@ -21,7 +21,7 @@ tags=(beta edge stable)
 
 for tag in ${tags[*]} ; do
   echo "--- :docker: Building ${DOCKER_IMAGE}:${tag}"
-  docker build --tag "${DOCKER_IMAGE}:${tag}" -f "${tag}/Dockerfile" .
+  docker build --squash --tag "${DOCKER_IMAGE}:${tag}" -f "${tag}/Dockerfile" .
 done
 
 if [[ "$DOCKER_PUSH" =~ (true|1) ]]; then
