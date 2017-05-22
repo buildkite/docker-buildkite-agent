@@ -12,6 +12,8 @@ The Buildkite Agent is built on Alpine Linux, and available via the following do
 * `buildkite/agent:3` - 3.x releases (beta)
 * `buildkite/agent:edge` - Edge releases (master branch)
 
+The default tag (`buildkite/agent` and `buildkite/agent:latest`) currently points to `buildkite/agent:2`, but will be updated to `buildkite/agent:3` once it’s out of beta.
+
 You can also use the exact Buildkite Agent version tag if you want to make sure nothing changes, such as `buildkite/agent:3.0-beta.16`.
 
 Included in the image are `docker 1.13 (client)`, `docker-compose 1.10.0`, `tini`, `su-exec` and `jq`.
