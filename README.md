@@ -26,7 +26,15 @@ docker run -it \
 
 ## Configuring the agent
 
-Almost all agent settings can be set with environment variables. Alternatively you can copy or mount a configuration file to `/buildkite/buildkite-agent.cfg`.
+Most [agent configuriation settings](https://buildkite.com/docs/agent/configuration) can be set with environment variables. Note: setting the agent token via an environment variable is not recommended as it is not secure (e.g. it will be exposed in `docker ps` commands).
+
+Alternatively, you can copy or mount a configuration file to `/buildkite/buildkite-agent.cfg`, for example:
+
+```bash
+docker run -it \
+  -v "$HOME/buildkite-agent.cfg:/buildkite/buildkite-agent.cfg:ro" \
+  buildkite/agent
+```
 
 ## Adding hooks
 
