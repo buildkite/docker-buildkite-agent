@@ -8,21 +8,25 @@ Docker images for the [Buildkite Agent](https://github.com/buildkite/agent).
 
 The Buildkite Agent is built on Alpine Linux, and available via the following docker image tags:
 
-* `buildkite/agent:2` - 2.x releases - Default (e.g. `buildkite/agent:latest`)
+* `buildkite/agent:2` - 2.x releases
 * `buildkite/agent:3` - 3.x releases (beta)
 * `buildkite/agent:edge` - Edge releases (master branch)
-
-The default tag (`buildkite/agent` and `buildkite/agent:latest`) currently points to `buildkite/agent:2`, but will be updated to `buildkite/agent:3` once it’s out of beta.
-
-You can also use the exact Buildkite Agent version tag if you want to make sure nothing changes, such as `buildkite/agent:3.0-beta.16`.
 
 Included in the image are `docker 1.13 (client)`, `docker-compose 1.10.0`, `tini`, `su-exec` and `jq`.
 
 ## Usage
 
 ```bash
-docker run buildkite/agent:2 --help
+docker run buildkite/agent:3 --help
 ```
+
+## Versioning
+
+The default tag (i.e. `buildkite/agent` and `buildkite/agent:latest`) will always point to the latest stable release (currently 2.x, but will change to 3.x once 3.0.0 is released).
+
+We recommend you use `buildkite/agent:3` for new setups.
+
+If you want to use an exact version of Buildkite Agent you can use the corresponding tag, such as `buildkite/agent:3.0-beta.16`.
 
 ## Configuring the agent
 
@@ -33,7 +37,7 @@ In addition to environment variables, you can copy or mount a configuration file
 ```bash
 docker run -it \
   -v "$HOME/buildkite-agent.cfg:/buildkite/buildkite-agent.cfg:ro" \
-  buildkite/agent:2
+  buildkite/agent:3
 ```
 
 ## Adding hooks
@@ -45,7 +49,7 @@ For example, this is how you'd mount the hooks directory using a read-only host 
 ```bash
 docker run -it \
   -v "$HOME/buildkite-hooks:/buildkite-hooks:ro" \
-  buildkite/agent:2
+  buildkite/agent:3
 ```
 
 Alternatively, if you create your own image based off `buildkite/agent`, you can copy your hooks into the correct location:
@@ -65,7 +69,7 @@ The following example mounts a directory containing secrets on the host machine 
 ```bash
 docker run -it \
   -v "$HOME/buildkite-secrets:/buildkite-secrets:ro" \
-  buildkite/agent:2
+  buildkite/agent:3
 ```
 
 You can then use an `environment` [agent hook](https://buildkite.com/docs/agent/hooks) to expose those secrets via environment variables, or to configure tools such as `git` or `ssh`.
@@ -111,7 +115,7 @@ To invoke Docker from within builds you'll need to mount the Docker socket into 
 ```bash
 docker run -it \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  buildkite/agent:2
+  buildkite/agent:3
 ```
 
 Note that this gives builds the same access to the host system as docker has, which is generally root. 
