@@ -74,7 +74,8 @@ You can then use an `environment` [agent hook](https://buildkite.com/docs/agent/
 
 To configure a [git-credentials file](https://git-scm.com/docs/git-credential-store#_storage_format) located at `/buildkite-secrets/git-credentials`, you could use the following `environment` [agent hook](https://buildkite.com/docs/agent/hooks) mounted to `/buildkite/hooks/environment`:
 
-```#!/bin/bash
+```bash
+#!/bin/bash
 
 set -euo pipefail
 
@@ -86,7 +87,8 @@ git config --global credential.helper "store --file=/buildkite-secrets/git-crede
 
 To configure a private SSH key located at `/buildkite-secrets/id_rsa_buildkite_git` you could use the following `environment` [agent hook](https://buildkite.com/docs/agent/hooks) mounted to `/buildkite/hooks/environment`:
 
-```#!/bin/bash
+```bash
+#!/bin/bash
 
 set -euo pipefail
 
