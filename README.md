@@ -48,7 +48,7 @@ docker run -it \
   buildkite/agent
 ```
 
-Alternatively, if you create your own image based off `buildkite/agent`, you can copy a hooks into the correct location:
+Alternatively, if you create your own image based off `buildkite/agent`, you can copy your hooks into the correct location:
 
 ```dockerfile
 FROM buildkite/agent
@@ -58,19 +58,17 @@ ADD hooks /buildkite/hooks/
 
 ## Exposing build secrets into the container
 
-There are many approaches to exposing secrets to Docker containers. In addition, many Docker platforms have their own method for exposing secrets.
+There are many approaches to exposing secrets to Docker containers. In addition, many Docker platforms have their own methods for exposing secrets. If you’re running your own Docker containers, we recommend using a read-only [host volume](https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume).
 
-If you’re running your own Docker containers, we recommend using a read-only [host volume](https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume).
-
-You can use the `environment` [agent hook](https://buildkite.com/docs/agent/hooks) to configure `git`, `ssh`, or export environment variables.
-
-For example, the following mounts the directory `$HOME/buildkite-secrets` from the host machine into the container at `/buildkite-secrets` (as read-only):
+The following example mounts a directory on the host machine containing secrets files (`$HOME/buildkite-secrets`) into the container at `/buildkite-secrets` as a read-only data volume:
 
 ```bash
 docker run -it \
   -v "$HOME/buildkite-secrets:/buildkite-secrets:ro" \
   buildkite/agent
 ```
+
+You can then use an `environment` [agent hook](https://buildkite.com/docs/agent/hooks) to expose those secrets via environment variables, or to configure tools such as `git` or `ssh`.
 
 ## Authenticating private git repositories
 
