@@ -16,19 +16,15 @@ If in doubt, go with `buildkite/agent` — it's the most stable, and includes th
 
 Also included in the image are `docker 1.13 (client)`, `docker-compose 1.10.0`, `tini`, `su-exec` and `jq`.
 
-## Basic example
-
 ```bash
-docker run -it \
-  -e BUILDKITE_AGENT_TOKEN=xxx \
-  buildkite/agent
+docker run buildkite/agent --help
 ```
 
 ## Configuring the agent
 
-Most [agent configuration settings](https://buildkite.com/docs/agent/configuration) can be set with environment variables. Setting the agent token this way _is not recommended_ as it will be exposed in `docker ps` commands.
+Most [agent configuration settings](https://buildkite.com/docs/agent/configuration) can be set with environment variables. Setting sensitive data, (such as the agent token) via environment variables or command line arguments _is not recommended_ as they are exposed in commands such as `docker inspect`.
 
-Alternatively, you can copy or mount a configuration file to `/buildkite/buildkite-agent.cfg`, for example:
+In addition to environment variables, you can copy or mount a configuration file to `/buildkite/buildkite-agent.cfg`, for example:
 
 ```bash
 docker run -it \
@@ -110,7 +106,6 @@ To invoke Docker from within builds you'll need to mount the Docker socket into 
 
 ```bash
 docker run -it \
-  -e BUILDKITE_AGENT_TOKEN=xxx \
   -v /var/run/docker.sock:/var/run/docker.sock \
   buildkite/agent
 ```
