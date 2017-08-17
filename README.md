@@ -48,7 +48,7 @@ For example, this is how you'd mount the hooks directory using a read-only host 
 
 ```bash
 docker run -it \
-  -v "$HOME/buildkite-hooks:/buildkite-hooks:ro" \
+  -v "$HOME/buildkite-hooks:/buildkite/hooks:ro" \
   buildkite/agent:3
 ```
 
