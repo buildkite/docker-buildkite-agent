@@ -15,6 +15,9 @@ for tag in ${tags[*]} ; do
   echo "--- :hammer: Testing ${DOCKER_IMAGE}:${tag} can access docker socket"
   docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --entrypoint "docker" "${DOCKER_IMAGE}:${tag}" version
 
+  echo "--- :hammer: Testing ${DOCKER_IMAGE}:${tag} can run docker hello world"
+  docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --entrypoint "docker" "${DOCKER_IMAGE}:${tag}" run --rm hello-world
+
   echo "--- :hammer: Testing ${DOCKER_IMAGE}:${tag} has docker-compose"
   docker run --rm --entrypoint "docker-compose" "${DOCKER_IMAGE}:${tag}" --version
 done
