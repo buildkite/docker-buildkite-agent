@@ -13,7 +13,8 @@ RUN apk add --no-cache \
     su-exec \
     py-pip \
     libc6-compat \
-    run-parts
+    run-parts \
+    tzdata
 
 ENV BUILDKITE_BUILD_PATH=/buildkite/builds \
     BUILDKITE_HOOKS_PATH=/buildkite/hooks \
