@@ -7,7 +7,7 @@ tags=(beta edge stable)
 
 for tag in ${tags[*]} ; do
   echo "--- :docker: Building ${DOCKER_IMAGE}:${tag}"
-  docker build --tag "${DOCKER_IMAGE}:${tag}" -f "${tag}/Dockerfile" .
+  docker build --squash --tag "${DOCKER_IMAGE}:${tag}" -f "${tag}/Dockerfile" .
 
   echo "--- :hammer: Testing ${DOCKER_IMAGE}:${tag} can run"
   docker run --rm --entrypoint "buildkite-agent" "${DOCKER_IMAGE}:${tag}" --version
