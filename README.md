@@ -1,32 +1,23 @@
 # Docker Images for buildkite-agent
 
-[![Build status](https://badge.buildkite.com/5ab4d67e882c6ab2cf988790ec23f13c1913ebb9aaee2502d2.svg)](https://buildkite.com/buildkite/docker-buildkite-agent)
-
-Docker images for the [Buildkite Agent](https://github.com/buildkite/agent). 
+**Originally this was the source for the docker images for [Buildkite Agent](https://github.com/buildkite/agent), but they are now built as part of that project. See https://github.com/buildkite/agent/tree/master/packaging/docker/linux.**
 
 > If you don't need to run the agent on a purely Docker-based operating system (such as Kubernetes), and instead just want to [run your builds inside Docker containers](https://buildkite.com/docs/guides/docker-containerized-builds), then we recommend using one of the standard installers (such as `apt`). See the [containerized builds guide](https://buildkite.com/docs/guides/docker-containerized-builds) for more information.
-
-The Buildkite Agent is built on Alpine Linux, and available via the following docker image tags:
-
-* `buildkite/agent:2` - 2.x releases
-* `buildkite/agent:3` - 3.x releases (beta)
-* `buildkite/agent:edge` - Edge releases (master branch)
-
-Included in the image are `docker 1.13 (client)`, `docker-compose 1.10.0`, `tini`, `su-exec` and `jq`.
 
 ## Usage
 
 ```bash
-docker run buildkite/agent:3 --help
+docker pull buildkite/agent:3.0
+docker run buildkite/agent:3.0 --help
 ```
 
 ## Versioning
 
-The default tag (i.e. `buildkite/agent` and `buildkite/agent:latest`) will always point to the latest stable release (currently 2.x, but will change to 3.x once 3.0.0 is released).
+The default tag (i.e. `buildkite/agent` and `buildkite/agent:latest`) will always point to the latest stable release (currently 3.x).
 
 We recommend you use `buildkite/agent:3` for new setups.
 
-If you want to use an exact version of Buildkite Agent you can use the corresponding tag, such as `buildkite/agent:3.0-beta.16`.
+If you want to use an exact version of Buildkite Agent you can use the corresponding tag, such as `buildkite/agent:3.0.1`.
 
 ## Configuring the agent
 
@@ -118,7 +109,7 @@ docker run -it \
   buildkite/agent:3
 ```
 
-Note that this gives builds the same access to the host system as docker has, which is generally root. 
+Note that this gives builds the same access to the host system as docker has, which is generally root.
 
 ## Entrypoint customizations
 
