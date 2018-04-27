@@ -1,8 +1,6 @@
 # Docker Images for buildkite-agent
 
-**Originally this was the source for the docker images for [Buildkite Agent](https://github.com/buildkite/agent), but they are now built as part of that project. See https://github.com/buildkite/agent/tree/master/packaging/docker/linux.**
-
-> If you don't need to run the agent on a purely Docker-based operating system (such as Kubernetes), and instead just want to [run your builds inside Docker containers](https://buildkite.com/docs/guides/docker-containerized-builds), then we recommend using one of the standard installers (such as `apt`). See the [containerized builds guide](https://buildkite.com/docs/guides/docker-containerized-builds) for more information.
+**Originally this repository contained the source for the docker images for [Buildkite Agent](https://github.com/buildkite/agent), but they are now built as part of that project. See https://github.com/buildkite/agent/tree/master/packaging/docker/linux.**
 
 ## Usage
 
@@ -18,6 +16,8 @@ The default tag (i.e. `buildkite/agent` and `buildkite/agent:latest`) will alway
 We recommend you use `buildkite/agent:3` for new setups.
 
 If you want to use an exact version of Buildkite Agent you can use the corresponding tag, such as `buildkite/agent:3.0.1`.
+
+You can see all the available versions on https://hub.docker.com/r/buildkite/agent/tags/.
 
 ## Configuring the agent
 
