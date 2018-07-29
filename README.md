@@ -1,6 +1,6 @@
 # Docker Images for buildkite-agent
 
-**Originally this repository contained the source for the docker images for [Buildkite Agent](https://github.com/buildkite/agent), but they are now built as part of that project. See https://github.com/buildkite/agent/tree/master/packaging/docker/linux.**
+**Originally this repository contained the source for the docker images for [Buildkite Agent](https://github.com/buildkite/agent), but they are now built as part of that project. See https://github.com/buildkite/agent/tree/master/packaging/docker.**
 
 ## Usage
 
